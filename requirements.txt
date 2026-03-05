@@ -1,0 +1,8 @@
+# XORPHER v2.0 - Requirements
+# Author: Excalibra
+# GitHub: https://github.com/Excalibra
+# 
+# Install with: pip install -r requirements.txt
+
+colorama>=0.4.6
+pyperclip>=1.8.2
