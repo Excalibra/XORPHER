@@ -40,25 +40,36 @@ try:
 except ImportError:
     CLIPBOARD_AVAILABLE = False
 
-# XORPHER ASCII ART
-XORPHER_ART = f"""{Fore.CYAN}
-╔═══════════════════════════════════════════════════════════════════╗
-║  ██╗  ██╗ ██████╗ ██████╗ ██████╗ ██╗  ██╗███████╗██████╗        ║
-║  ╚██╗██╔╝██╔═══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██╔══██╗       ║
-║   ╚███╔╝ ██║   ██║██████╔╝██████╔╝███████║█████╗  ██████╔╝       ║
-║   ██╔██╗ ██║   ██║██╔══██╗██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗       ║
-║  ██╔╝ ██╗╚██████╔╝██║  ██║██║     ██║  ██║███████╗██║  ██║       ║
-║  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝       ║
-╠═══════════════════════════════════════════════════════════════════╣
-║                    S T E A L T H   E D I T I O N                  ║
-║                    v2.1 - Configurable Key Length                  ║
-╚═══════════════════════════════════════════════════════════════════╝
-{Fore.YELLOW}
-          GitHub: https://github.com/Excalibra
-          Author: Excalibra
-          Version: 2.1.0
-{Fore.CYAN}═════════════════════════════════════════════════════════════════════{Style.RESET_ALL}
-"""
+# XORPHER MATRIX CYBERPUNK BANNER
+XORPHER_ART = f"""{Fore.GREEN}
+    ██╗  ██╗ ██████╗ ██████╗ ██████╗ ██╗  ██╗███████╗██████╗ 
+    ╚██╗██╔╝██╔═══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██╔══██╗
+     ╚███╔╝ ██║   ██║██████╔╝██████╔╝███████║█████╗  ██████╔╝
+     ██╔██╗ ██║   ██║██╔══██╗██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗
+    ██╔╝ ██╗╚██████╔╝██║  ██║██║     ██║  ██║███████╗██║  ██║
+    ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+{Style.RESET_ALL}
+    
+{Fore.CYAN}    ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░
+    ▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░
+    ▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░
+{Style.RESET_ALL}
+    
+{Fore.YELLOW}    KEY LENGTH         |  EVASION LEVEL      |  ALGORITHM
+    ───────────────────┼─────────────────────┼───────────────────
+    ▸ 1-64 bytes       │  ▸ 0% (none)        │  ▸ simple
+    ▸ auto (max entropy│  ▸ 20% (low)        │  ▸ rotating ★
+    ▸ custom           │  ▸ 40% (medium)     │  ▸ polymorphic
+                       │  ▸ 60% (high)       │
+                       │  ▸ 80% (extreme)    │
+{Style.RESET_ALL}
+    
+{Fore.MAGENTA}    ⚡ GITHUB: https://github.com/Excalibra
+    ⚡ AUTHOR: Excalibra  |  VERSION: 2.1.0
+{Style.RESET_ALL}
+    
+{Fore.GREEN}    01011000 01001111 01010010 01010000 01001000 01000101 01010010
+{Style.RESET_ALL}"""
 
 class EncryptionResult:
     """Class for encryption results"""
@@ -84,7 +95,7 @@ class XorpherUI:
     
     @staticmethod
     def print_banner():
-        """Print the XORPHER banner"""
+        """Print the XORPHER cyberpunk banner"""
         print(XORPHER_ART)
     
     @staticmethod
@@ -109,16 +120,14 @@ class XorpherUI:
     
     @staticmethod
     def print_header(title):
-        """Print a section header"""
-        print(f"\n{Fore.MAGENTA}{'='*60}")
-        print(f"{Fore.YELLOW}{title:^60}")
-        print(f"{Fore.MAGENTA}{'='*60}{Style.RESET_ALL}")
+        """Print a section header with cyberpunk style"""
+        print(f"\n{Fore.MAGENTA}╭─{title}{'─' * (60 - len(title))}╮{Style.RESET_ALL}")
     
     @staticmethod
     def print_subheader(title):
         """Print a subsection header"""
-        print(f"\n{Fore.CYAN}{title}{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}{'-'*40}{Style.RESET_ALL}")
+        print(f"\n{Fore.CYAN}├─ {title}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}│{Style.RESET_ALL}")
 
 class XorpherEngine:
     """Core encryption engine"""
@@ -239,7 +248,7 @@ class XorpherEngine:
         
         # Verify encryption
         if not self.verify_encryption(data, encrypted, key):
-            print(f"{Fore.YELLOW}[!] Warning: Encryption verification failed, retrying...{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}⚠ [WARNING] Encryption verification failed, retrying...{Style.RESET_ALL}")
             return self.encrypt(data, algorithm, evasion_level, key_length)
         
         # Generate all output formats
@@ -273,68 +282,75 @@ class XorpherEngine:
         
         # Create all formats
         output = []
-        output.append("=" * 60)
-        output.append("C ARRAY - MULTIPLE FORMATS")
-        output.append("=" * 60)
+        output.append("╔════════════════════════════════════════════════════════════╗")
+        output.append("║  C ARRAY - MULTIPLE FORMATS                                ║")
+        output.append("╚════════════════════════════════════════════════════════════╝")
         output.append("")
         
         # Format 1: String literal
-        output.append("// Option 1: String literal format")
-        output.append(f'unsigned char encrypted[] = "{encrypted_str}";')
-        output.append(f"unsigned char key[] = {{{key_str}}};")
-        output.append(f"unsigned int key_len = {len(key)};")
-        output.append("")
+        output.append("├─ Option 1: String literal format")
+        output.append("│")
+        output.append(f'│  unsigned char encrypted[] = "{encrypted_str}";')
+        output.append(f"│  unsigned char key[] = {{{key_str}}};")
+        output.append(f"│  unsigned int key_len = {len(key)};")
+        output.append("│")
         
         # Format 2: Byte array
-        output.append("// Option 2: Byte array format")
-        output.append(f"unsigned char encrypted[] = {{{hex_bytes}}};")
-        output.append(f"unsigned char key[] = {{{key_str}}};")
-        output.append(f"unsigned int key_len = {len(key)};")
-        output.append("")
+        output.append("├─ Option 2: Byte array format")
+        output.append("│")
+        output.append(f"│  unsigned char encrypted[] = {{{hex_bytes}}};")
+        output.append(f"│  unsigned char key[] = {{{key_str}}};")
+        output.append(f"│  unsigned int key_len = {len(key)};")
+        output.append("│")
         
         # Format 3: Struct format
-        output.append("// Option 3: Struct format (customize as needed)")
-        output.append("typedef struct {")
-        output.append("    unsigned char* data;")
-        output.append("    unsigned int size;")
-        output.append(f"    unsigned char key[{len(key)}];")
-        output.append("} encrypted_string_t;")
-        output.append("")
-        output.append("encrypted_string_t encrypted = {")
-        output.append(f'    (unsigned char*)"{encrypted_str}",')
-        output.append(f"    {len(encrypted)},")
-        output.append(f"    {{{key_str}}}")
-        output.append("};")
-        output.append("")
+        output.append("├─ Option 3: Struct format (customize as needed)")
+        output.append("│")
+        output.append("│  typedef struct {")
+        output.append("│      unsigned char* data;")
+        output.append("│      unsigned int size;")
+        output.append(f"│      unsigned char key[{len(key)}];")
+        output.append("│  } encrypted_string_t;")
+        output.append("│")
+        output.append("│  encrypted_string_t encrypted = {")
+        output.append(f'│      (unsigned char*)"{encrypted_str}",')
+        output.append(f"│      {len(encrypted)},")
+        output.append(f"│      {{{key_str}}}")
+        output.append("│  };")
+        output.append("│")
         
-        # Format 4: Compact single line (useful for copy-paste)
-        output.append("// Option 4: Compact format (easy copy-paste)")
-        output.append(f'#define ENCRYPTED_DATA "{encrypted_str}"')
-        output.append(f"#define ENCRYPTED_SIZE {len(encrypted)}")
-        output.append(f"#define KEY {{{key_str}}}")
-        output.append(f"#define KEY_SIZE {len(key)}")
-        output.append("")
+        # Format 4: Compact single line
+        output.append("├─ Option 4: Compact format (easy copy-paste)")
+        output.append("│")
+        output.append(f'│  #define ENCRYPTED_DATA "{encrypted_str}"')
+        output.append(f"│  #define ENCRYPTED_SIZE {len(encrypted)}")
+        output.append(f"│  #define KEY {{{key_str}}}")
+        output.append(f"│  #define KEY_SIZE {len(key)}")
+        output.append("│")
         
         # Format 5: Decryption function
-        output.append("// Decryption function")
-        output.append("void decrypt(unsigned char *data, int data_len, unsigned char *key, int key_len) {")
-        output.append("    for(int i = 0; i < data_len; i++) {")
-        output.append("        data[i] ^= key[i % key_len];")
-        output.append("    }")
-        output.append("}")
-        output.append("")
-        output.append("// Usage example:")
-        output.append("// decrypt(encrypted, sizeof(encrypted), key, key_len);")
-        output.append("// printf(\"%%s\\n\", encrypted);")
+        output.append("├─ Decryption function")
+        output.append("│")
+        output.append("│  void decrypt(unsigned char *data, int data_len, unsigned char *key, int key_len) {")
+        output.append("│      for(int i = 0; i < data_len; i++) {")
+        output.append("│          data[i] ^= key[i % key_len];")
+        output.append("│      }")
+        output.append("│  }")
+        output.append("│")
+        output.append("│  // Usage:")
+        output.append("│  // decrypt(encrypted, sizeof(encrypted), key, key_len);")
+        output.append("│  // printf(\"%%s\\n\", encrypted);  // Original string appears!")
+        output.append("│")
+        output.append("╰────────────────────────────────────────────────────────────╯")
         
         return "\n".join(output)
     
     def generate_python_array(self, encrypted: bytes, key: List[int], original_len: int) -> str:
         """Generate Python array code"""
         output = []
-        output.append("=" * 60)
-        output.append("PYTHON IMPLEMENTATION")
-        output.append("=" * 60)
+        output.append("╔════════════════════════════════════════════════════════════╗")
+        output.append("║  PYTHON IMPLEMENTATION                                     ║")
+        output.append("╚════════════════════════════════════════════════════════════╝")
         output.append("")
         output.append("# Encrypted data")
         output.append(f"encrypted = {list(encrypted)}")
@@ -349,6 +365,8 @@ class XorpherEngine:
         output.append("# Decrypt and verify")
         output.append("decrypted = decrypt(encrypted, key)")
         output.append("print(f\"Decrypted: {decrypted.decode('utf-8', errors='ignore')}\")")
+        output.append("")
+        output.append("# Expected output contains the original string")
         
         return "\n".join(output)
 
@@ -369,12 +387,12 @@ class XorpherGenerator:
         self.ui.clear_screen()
         self.ui.print_banner()
         
-        self.ui.print_header("STRING ENCRYPTION")
+        self.ui.print_header("🔐 STRING ENCRYPTION")
         
         # Get input from user
-        print(f"\n{Fore.CYAN}Enter the string to encrypt:{Style.RESET_ALL}")
-        print(f"{Fore.WHITE}(e.g., api.example.com, 192.168.1.1, secret_string, etc.){Style.RESET_ALL}")
-        text = input(f"\n{Fore.GREEN}>>>{Style.RESET_ALL} ").strip()
+        print(f"\n{Fore.CYAN}│  Enter the string to encrypt:{Style.RESET_ALL}")
+        print(f"{Fore.WHITE}│  (e.g., api.example.com, 192.168.1.1, secret_string){Style.RESET_ALL}")
+        text = input(f"{Fore.GREEN}│  >>>{Style.RESET_ALL} ").strip()
         
         if not text:
             self.ui.print_error("No input provided!")
@@ -382,12 +400,12 @@ class XorpherGenerator:
             return
         
         # Select algorithm
-        self.ui.print_header("SELECT ALGORITHM")
-        print(f"{Fore.CYAN}1. Simple XOR{Style.RESET_ALL}     - Single key")
-        print(f"{Fore.CYAN}2. Rotating XOR{Style.RESET_ALL}   - Key repeats every N bytes")
-        print(f"{Fore.CYAN}3. Polymorphic{Style.RESET_ALL}    - Hash-based dynamic keys")
+        self.ui.print_header("🔄 SELECT ALGORITHM")
+        print(f"{Fore.CYAN}│  1. simple{Style.RESET_ALL}      - Single key")
+        print(f"{Fore.CYAN}│  2. rotating{Style.RESET_ALL}    - Key repeats every N bytes {Fore.YELLOW}★ recommended{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}│  3. poly{Style.RESET_ALL}         - Polymorphic (hash-based)")
         
-        algo_choice = input(f"\n{Fore.GREEN}Choice (1-3) [default: 2]:{Style.RESET_ALL} ").strip() or "2"
+        algo_choice = input(f"\n{Fore.GREEN}│  Choice (1-3) [default: 2]:{Style.RESET_ALL} ").strip() or "2"
         
         algorithms = {
             '1': 'simple',
@@ -397,23 +415,23 @@ class XorpherGenerator:
         algorithm = algorithms.get(algo_choice, 'rotating')
         
         # Select key length
-        self.ui.print_header("KEY LENGTH CONFIGURATION")
-        print(f"{Fore.CYAN}Choose key length (affects security & compatibility):{Style.RESET_ALL}")
-        print(f"\n{Fore.YELLOW}1. Auto{Style.RESET_ALL}         - Key length = data length (maximum entropy)")
-        print(f"{Fore.YELLOW}2. 1 byte{Style.RESET_ALL}        - Single key (simple XOR)")
-        print(f"{Fore.YELLOW}3. 3 bytes{Style.RESET_ALL}       - Common for legacy code")
-        print(f"{Fore.YELLOW}4. 4 bytes{Style.RESET_ALL}       - Good balance")
-        print(f"{Fore.YELLOW}5. 8 bytes{Style.RESET_ALL}       - Stronger")
-        print(f"{Fore.YELLOW}6. 16 bytes{Style.RESET_ALL}      - Very strong")
-        print(f"{Fore.YELLOW}7. 32 bytes{Style.RESET_ALL}      - Maximum strength")
-        print(f"{Fore.YELLOW}8. Custom{Style.RESET_ALL}        - Specify your own length")
+        self.ui.print_header("🔑 KEY LENGTH CONFIGURATION")
+        print(f"{Fore.CYAN}│  Choose key length:{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}│  1. auto{Style.RESET_ALL}        - Key length = data length (max entropy)")
+        print(f"{Fore.YELLOW}│  2. 1 byte{Style.RESET_ALL}       - Simple XOR")
+        print(f"{Fore.YELLOW}│  3. 3 bytes{Style.RESET_ALL}      - Legacy compatibility")
+        print(f"{Fore.YELLOW}│  4. 4 bytes{Style.RESET_ALL}      - Good balance")
+        print(f"{Fore.YELLOW}│  5. 8 bytes{Style.RESET_ALL}      - Stronger")
+        print(f"{Fore.YELLOW}│  6. 16 bytes{Style.RESET_ALL}     - Very strong")
+        print(f"{Fore.YELLOW}│  7. 32 bytes{Style.RESET_ALL}     - Maximum strength")
+        print(f"{Fore.YELLOW}│  8. custom{Style.RESET_ALL}       - Specify your own (1-64)")
         
-        key_choice = input(f"\n{Fore.GREEN}Choice (1-8) [default: 3]:{Style.RESET_ALL} ").strip() or "3"
+        key_choice = input(f"\n{Fore.GREEN}│  Choice (1-8) [default: 3]:{Style.RESET_ALL} ").strip() or "3"
         
         key_length = None
         if key_choice == '1':
-            key_length = None  # Auto
-            self.ui.print_info("Using auto key length (equals data length)")
+            key_length = None
+            self.ui.print_info("Auto mode engaged")
         elif key_choice == '2':
             key_length = 1
         elif key_choice == '3':
@@ -428,23 +446,23 @@ class XorpherGenerator:
             key_length = 32
         elif key_choice == '8':
             try:
-                key_length = int(input(f"{Fore.CYAN}Enter key length (1-64):{Style.RESET_ALL} ").strip())
+                key_length = int(input(f"{Fore.CYAN}│  Enter key length (1-64):{Style.RESET_ALL} ").strip())
                 if key_length < 1 or key_length > 64:
                     key_length = 3
-                    self.ui.print_warning("Invalid length, using 3 bytes")
+                    self.ui.print_warning("Invalid length, defaulting to 3")
             except:
                 key_length = 3
                 self.ui.print_warning("Using 3 bytes")
         
         # Select evasion level
-        self.ui.print_header("SELECT EVASION LEVEL")
-        print(f"{Fore.CYAN}1. None{Style.RESET_ALL}      - No garbage bytes")
-        print(f"{Fore.CYAN}2. Low{Style.RESET_ALL}       - 20% garbage bytes")
-        print(f"{Fore.CYAN}3. Medium{Style.RESET_ALL}    - 40% garbage bytes")
-        print(f"{Fore.CYAN}4. High{Style.RESET_ALL}      - 60% garbage bytes")
-        print(f"{Fore.CYAN}5. Extreme{Style.RESET_ALL}   - 80% garbage bytes")
+        self.ui.print_header("🛡️ EVASION LEVEL")
+        print(f"{Fore.CYAN}│  1. none{Style.RESET_ALL}     - 0% garbage")
+        print(f"{Fore.CYAN}│  2. low{Style.RESET_ALL}      - 20% garbage")
+        print(f"{Fore.CYAN}│  3. medium{Style.RESET_ALL}   - 40% garbage")
+        print(f"{Fore.CYAN}│  4. high{Style.RESET_ALL}     - 60% garbage")
+        print(f"{Fore.CYAN}│  5. extreme{Style.RESET_ALL}  - 80% garbage")
         
-        eva_choice = input(f"\n{Fore.GREEN}Choice (1-5) [default: 1]:{Style.RESET_ALL} ").strip() or "1"
+        eva_choice = input(f"\n{Fore.GREEN}│  Choice (1-5) [default: 1]:{Style.RESET_ALL} ").strip() or "1"
         
         evasion_levels = {
             '1': 'none',
@@ -456,23 +474,21 @@ class XorpherGenerator:
         evasion = evasion_levels.get(eva_choice, 'none')
         
         # Show summary
-        print(f"\n{Fore.YELLOW}{'='*50}")
-        print(f"Encryption Summary:")
-        print(f"{'='*50}")
-        print(f"String:     {text}")
-        print(f"Algorithm:  {algorithm}")
-        print(f"Key Length: {key_length if key_length else 'Auto'} bytes")
-        print(f"Evasion:    {evasion}")
-        print(f"{'='*50}{Style.RESET_ALL}")
+        print(f"\n{Fore.YELLOW}╭─ ENCRYPTION SUMMARY {'─' * 40}╮")
+        print(f"│  String:     {text}")
+        print(f"│  Algorithm:  {algorithm}")
+        print(f"│  Key Length: {key_length if key_length else 'Auto'} bytes")
+        print(f"│  Evasion:    {evasion}")
+        print(f"╰{'─' * 58}╯{Style.RESET_ALL}")
         
-        confirm = input(f"\n{Fore.CYAN}Proceed? (y/n) [default: y]:{Style.RESET_ALL} ").strip().lower()
+        confirm = input(f"\n{Fore.CYAN}│  Proceed? (y/n) [default: y]:{Style.RESET_ALL} ").strip().lower()
         if confirm == 'n':
             self.ui.print_info("Encryption cancelled")
             input("\nPress Enter to continue...")
             return
         
         # Perform encryption
-        self.ui.print_info("Encrypting...")
+        self.ui.print_info("Initializing encryption matrix...")
         result = self.engine.encrypt(text, algorithm, evasion, key_length)
         self.results_history.append(result)
         
@@ -485,13 +501,12 @@ class XorpherGenerator:
         # Copy to clipboard if available
         if CLIPBOARD_AVAILABLE:
             try:
-                # Ask what to copy
-                print(f"\n{Fore.CYAN}Copy to clipboard?{Style.RESET_ALL}")
-                print("1. C array (all formats)")
-                print("2. Python implementation")
-                print("3. Base64 only")
-                print("4. Nothing")
-                copy_choice = input(f"\n{Fore.GREEN}Choice (1-4) [default: 1]:{Style.RESET_ALL} ").strip() or "1"
+                print(f"\n{Fore.CYAN}│  Copy to clipboard?{Style.RESET_ALL}")
+                print("│  1. C array (all formats)")
+                print("│  2. Python implementation")
+                print("│  3. Base64 only")
+                print("│  4. Nothing")
+                copy_choice = input(f"\n{Fore.GREEN}│  Choice (1-4) [default: 1]:{Style.RESET_ALL} ").strip() or "1"
                 
                 if copy_choice == '1':
                     pyperclip.copy(result.c_array)
@@ -505,56 +520,57 @@ class XorpherGenerator:
             except:
                 pass
         
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.CYAN}│  Press Enter to continue...{Style.RESET_ALL}")
     
     def display_full_results(self, result: EncryptionResult):
-        """Display complete encryption results in terminal"""
+        """Display complete encryption results in terminal with cyberpunk style"""
         self.ui.clear_screen()
-        self.ui.print_header("🔐 ENCRYPTION RESULTS")
+        
+        print(f"{Fore.GREEN}{'╔' + '═' * 78 + '╗'}")
+        print(f"║{' ' * 31}🔐 ENCRYPTION RESULTS{' ' * 31}║")
+        print(f"{'╚' + '═' * 78 + '╝'}{Style.RESET_ALL}")
         
         # Summary section
-        print(f"\n{Fore.GREEN}SUMMARY:{Style.RESET_ALL}")
-        print(f"  • Original:     {Fore.WHITE}{result.original}{Style.RESET_ALL}")
-        print(f"  • Algorithm:    {Fore.WHITE}{result.algorithm}{Style.RESET_ALL}")
-        print(f"  • Key Length:   {Fore.WHITE}{result.key_length if result.key_length else 'Auto'} bytes{Style.RESET_ALL}")
-        print(f"  • Evasion:      {Fore.WHITE}{result.evasion_level}{Style.RESET_ALL}")
-        print(f"  • Encrypted:    {Fore.WHITE}{len(result.encrypted)} bytes{Style.RESET_ALL}")
-        print(f"  • Base64:       {Fore.WHITE}{result.base64[:50]}...{Style.RESET_ALL}")
+        print(f"\n{Fore.CYAN}╭─ SUMMARY {'─' * 68}╮")
+        print(f"│  {Fore.YELLOW}Original:{Style.RESET_ALL}     {result.original}")
+        print(f"│  {Fore.YELLOW}Algorithm:{Style.RESET_ALL}    {result.algorithm}")
+        print(f"│  {Fore.YELLOW}Key Length:{Style.RESET_ALL}   {result.key_length if result.key_length else 'Auto'} bytes")
+        print(f"│  {Fore.YELLOW}Evasion:{Style.RESET_ALL}      {result.evasion_level}")
+        print(f"│  {Fore.YELLOW}Encrypted:{Style.RESET_ALL}    {len(result.encrypted)} bytes")
+        print(f"│  {Fore.YELLOW}Base64:{Style.RESET_ALL}       {result.base64[:50]}...")
         
         # Key preview
         key_hex = ' '.join([f'0x{b:02x}' for b in result.key[:8]])
         if len(result.key) > 8:
             key_hex += ' ...'
-        print(f"  • Key (first 8): {Fore.WHITE}{key_hex}{Style.RESET_ALL}")
+        print(f"│  {Fore.YELLOW}Key (first 8):{Style.RESET_ALL} {key_hex}")
+        print(f"╰{'─' * 78}╯")
         
         # C Array section
-        print(f"\n{Fore.GREEN}{'='*60}")
-        print(f"📋 C ARRAY IMPLEMENTATION")
-        print(f"{'='*60}{Style.RESET_ALL}")
+        print(f"\n{Fore.GREEN}╭─ C ARRAY IMPLEMENTATION {'─' * 54}╮{Style.RESET_ALL}")
         print(result.c_array)
         
         # Python section
-        print(f"\n{Fore.GREEN}{'='*60}")
-        print(f"🐍 PYTHON IMPLEMENTATION")
-        print(f"{'='*60}{Style.RESET_ALL}")
+        print(f"\n{Fore.MAGENTA}╭─ PYTHON IMPLEMENTATION {'─' * 55}╮{Style.RESET_ALL}")
         print(result.python_array)
         
         # Verification
-        print(f"\n{Fore.GREEN}{'='*60}")
-        print(f"✅ VERIFICATION")
-        print(f"{'='*60}{Style.RESET_ALL}")
+        print(f"\n{Fore.YELLOW}╭─ VERIFICATION {'─' * 65}╮{Style.RESET_ALL}")
         
         # Decrypt to verify
         decrypted = self.engine.decrypt(result.encrypted, result.key)
         if result.original in decrypted:
-            print(f"{Fore.GREEN}✓ Encryption verified successfully!{Style.RESET_ALL}")
-            print(f"  Decrypted string contains: {Fore.WHITE}{result.original}{Style.RESET_ALL}")
-            print(f"  Full decrypted: {Fore.WHITE}{decrypted}{Style.RESET_ALL}")
+            print(f"│  {Fore.GREEN}✓ ENCRYPTION VERIFIED SUCCESSFULLY{Style.RESET_ALL}")
+            print(f"│  {Fore.CYAN}Decrypted string contains:{Style.RESET_ALL} {result.original}")
+            print(f"│  {Fore.CYAN}Full decrypted:{Style.RESET_ALL} {decrypted}")
         else:
-            print(f"{Fore.RED}✗ Verification failed!{Style.RESET_ALL}")
+            print(f"│  {Fore.RED}✗ VERIFICATION FAILED!{Style.RESET_ALL}")
+        print(f"╰{'─' * 78}╯")
         
         # File info
-        print(f"\n{Fore.YELLOW}📁 Full results also saved to: {self.output_dir}/{Style.RESET_ALL}")
+        print(f"\n{Fore.GREEN}╭─ FILE OUTPUT {'─' * 65}╮")
+        print(f"│  📁 Full results saved to: {self.output_dir}/")
+        print(f"╰{'─' * 78}╯{Style.RESET_ALL}")
     
     def save_result(self, result: EncryptionResult):
         """Save result to file"""
@@ -599,41 +615,43 @@ class XorpherGenerator:
         self.ui.clear_screen()
         self.ui.print_banner()
         
-        self.ui.print_header("XORPHER ENCRYPTION GUIDE")
+        self.ui.print_header("📖 XORPHER ENCRYPTION GUIDE")
         
         guide = f"""
-{Fore.CYAN}KEY LENGTH SELECTION:{Style.RESET_ALL}
-• Auto      - Key length = data length (maximum entropy)
-• 1 byte    - Simple XOR, least secure
-• 3 bytes   - Common in legacy code
-• 4-8 bytes - Good balance of security & size
-• 16+ bytes - Maximum security
+{Fore.CYAN}╭─ KEY LENGTH SELECTION {'─' * 55}╮
+│  • Auto      - Key length = data length (maximum entropy)  │
+│  • 1 byte    - Simple XOR, least secure                     │
+│  • 3 bytes   - Common in legacy code                         │
+│  • 4-8 bytes - Good balance of security & size               │
+│  • 16+ bytes - Maximum security                              │
+╰{'─' * 78}╯
 
-{Fore.CYAN}EVASION LEVELS:{Style.RESET_ALL}
-• None    - No garbage, smallest output
-• Low     - 20% garbage bytes
-• Medium  - 40% garbage bytes
-• High    - 60% garbage bytes
-• Extreme - 80% garbage bytes, hardest to detect
+{Fore.YELLOW}╭─ EVASION LEVELS {'─' * 60}╮
+│  • None    - 0% garbage, smallest output                    │
+│  • Low     - 20% garbage bytes                               │
+│  • Medium  - 40% garbage bytes (recommended)                 │
+│  • High    - 60% garbage bytes                               │
+│  • Extreme - 80% garbage bytes, hardest to detect            │
+╰{'─' * 78}╯
 
-{Fore.CYAN}ALGORITHMS:{Style.RESET_ALL}
-• Simple    - Single key for all bytes
-• Rotating  - Key repeats every N bytes (recommended)
-• Polymorphic - Hash-based keys, different each run
+{Fore.MAGENTA}╭─ ALGORITHMS {'─' * 63}╮
+│  • Simple     - Single key for all bytes                     │
+│  • Rotating   - Key repeats every N bytes ★ recommended      │
+│  • Polymorphic - Hash-based keys, different each run         │
+╰{'─' * 78}╯
 
-{Fore.CYAN}OUTPUT FORMATS:{Style.RESET_ALL}
-The tool displays and saves multiple formats:
-1. String literal with key array
-2. Byte array format
-3. Struct format (customizable)
-4. Compact #define format
-5. Python implementation with decryption function
+{Fore.GREEN}╭─ OUTPUT FORMATS {'─' * 59}╮
+│  • String literal with key array                             │
+│  • Byte array format                                          │
+│  • Struct format (customizable)                               │
+│  • Compact #define format                                     │
+│  • Python implementation with decryption function             │
+╰{'─' * 78}╯
 
-{Fore.YELLOW}TIP: Choose key length based on your decryption code!
-All formats are displayed directly in the terminal for easy copy-paste.{Style.RESET_ALL}
+{Fore.RED}⚠️  DISCLAIMER: For educational and authorized testing only!{Style.RESET_ALL}
 """
         print(guide)
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.CYAN}│  Press Enter to continue...{Style.RESET_ALL}")
     
     def show_about(self):
         """Show about information"""
@@ -641,57 +659,54 @@ All formats are displayed directly in the terminal for easy copy-paste.{Style.RE
         self.ui.print_banner()
         
         about = f"""
-{Fore.CYAN}╔══════════════════════════════════════════════════════════╗
-║                    ABOUT XORPHER v2.1                      ║
-╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}
+{Fore.GREEN}╔════════════════════════════════════════════════════════════╗
+║                 XORPHER v2.1 - MATRIX EDITION               ║
+╚════════════════════════════════════════════════════════════╝
 
-{Fore.YELLOW}Author:{Style.RESET_ALL}  Excalibra
-{Fore.YELLOW}GitHub:{Style.RESET_ALL}  https://github.com/Excalibra
-{Fore.YELLOW}License:{Style.RESET_ALL} MIT
+{Fore.CYAN}╭─ ABOUT {'─' * 70}╮
+│  Author:  Excalibra                                           │
+│  GitHub:  https://github.com/Excalibra                        │
+│  License: MIT                                                  │
+│  Version: 2.1.0 - Configurable Key Lengths                    │
+╰{'─' * 78}╯
 
-{Fore.CYAN}Description:{Style.RESET_ALL}
-XORPHER is an advanced XOR encryption tool with configurable
-key lengths and evasion techniques. All encryption results
-are displayed directly in the terminal for immediate use.
+{Fore.YELLOW}╭─ DESCRIPTION {'─' * 63}╮
+│  XORPHER is an advanced XOR encryption tool with configurable  │
+│  key lengths and evasion techniques. All results are displayed │
+│  directly in the terminal for immediate copy-paste use.        │
+╰{'─' * 78}╯
 
-{Fore.CYAN}Features:{Style.RESET_ALL}
-• Configurable key lengths (1-64 bytes)
-• Multiple encryption algorithms
-• Garbage byte insertion for evasion
-• Multiple output formats (C, Python)
-• Full results displayed in terminal
-• Automatic verification
-• Clipboard integration
-• Saves to timestamped files
+{Fore.MAGENTA}╭─ FEATURES {'─' * 66}╮
+│  • Configurable key lengths (1-64 bytes)                      │
+│  • Multiple encryption algorithms                              │
+│  • Garbage byte insertion for evasion                          │
+│  • Multiple output formats (C, Python)                         │
+│  • Full results displayed in terminal                          │
+│  • Automatic verification                                      │
+│  • Clipboard integration                                       │
+│  • Saves to timestamped files                                  │
+╰{'─' * 78}╯
 
-{Fore.CYAN}Use Cases:{Style.RESET_ALL}
-• String obfuscation in payloads
-• Evading static analysis
-• Red team operations
-• Educational purposes
-• Authorized security testing
-
-{Fore.YELLOW}Disclaimer:{Style.RESET_ALL}
-For educational and authorized testing only.
-The author is not responsible for misuse.
+{Fore.RED}⚠️  DISCLAIMER: For educational and authorized testing only!
+   The author is not responsible for misuse.{Style.RESET_ALL}
 """
         print(about)
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.CYAN}│  Press Enter to continue...{Style.RESET_ALL}")
     
     def main_menu(self):
         """Display main menu and handle user input"""
         while True:
             self.ui.clear_screen()
             self.ui.print_banner()
-            
-            print(f"\n{Fore.YELLOW}MAIN MENU:{Style.RESET_ALL}")
-            print(f"{Fore.CYAN}1.{Style.RESET_ALL} 🔐 Encrypt a string")
-            print(f"{Fore.CYAN}2.{Style.RESET_ALL} 📖 Encryption guide")
-            print(f"{Fore.CYAN}3.{Style.RESET_ALL} ℹ️ About")
-            print(f"{Fore.CYAN}4.{Style.RESET_ALL} 🚪 Exit")
-            
-            choice = input(f"\n{Fore.GREEN}Select option (1-4):{Style.RESET_ALL} ").strip()
-            
+        
+            print(f"\n{Fore.YELLOW}    MAIN MENU{Style.RESET_ALL}")
+            print(f"    {Fore.CYAN}1.{Style.RESET_ALL} 🔐 Encrypt a string")
+            print(f"    {Fore.CYAN}2.{Style.RESET_ALL} 📖 Encryption guide")
+            print(f"    {Fore.CYAN}3.{Style.RESET_ALL} ℹ️ About")
+            print(f"    {Fore.CYAN}4.{Style.RESET_ALL} 🚪 Exit")
+        
+            choice = input(f"\n{Fore.GREEN}    ⚡ Select option (1-4):{Style.RESET_ALL} ").strip()
+        
             if choice == '1':
                 self.encrypt_string()
             elif choice == '2':
@@ -699,11 +714,11 @@ The author is not responsible for misuse.
             elif choice == '3':
                 self.show_about()
             elif choice == '4':
-                self.ui.print_info("Thanks for using XORPHER!")
-                print(f"{Fore.CYAN}GitHub: https://github.com/Excalibra{Style.RESET_ALL}")
+                print(f"\n{Fore.CYAN}    ⚡ GLITCH TERMINATED. THANKS FOR USING XORPHER! ⚡{Style.RESET_ALL}")
+                print(f"{Fore.MAGENTA}    https://github.com/Excalibra{Style.RESET_ALL}")
                 sys.exit(0)
             else:
-                self.ui.print_error("Invalid option!")
+                self.ui.print_error("Invalid option! Choose 1-4")
                 input("\nPress Enter to continue...")
 
 def main():
@@ -713,13 +728,13 @@ def main():
     try:
         generator.main_menu()
     except KeyboardInterrupt:
-        print(f"\n\n{Fore.YELLOW}[!] Interrupted by user{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}[+] Thanks for using XORPHER!{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}[+] GitHub: https://github.com/Excalibra{Style.RESET_ALL}")
+        print(f"\n\n{Fore.YELLOW}⚠ INTERRUPTED BY USER{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}⚡ GLITCH TERMINATED{Style.RESET_ALL}")
+        print(f"{Fore.MAGENTA}https://github.com/Excalibra{Style.RESET_ALL}")
         sys.exit(0)
     except Exception as e:
-        print(f"\n{Fore.RED}[!] Error: {e}{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}[+] Report issues: https://github.com/Excalibra/xorpher/issues{Style.RESET_ALL}")
+        print(f"\n{Fore.RED}⚠ ERROR: {e}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Report issues: https://github.com/Excalibra/xorpher/issues{Style.RESET_ALL}")
         sys.exit(1)
 
 if __name__ == "__main__":
