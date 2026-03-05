@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Excalibra/xorpher/main/assets/logo.png" alt="XORPHER Logo" width="200px">
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/83846602/558865565-0d9d126c-9b57-47a1-96e2-fb4ca0306989.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260305%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260305T173913Z&X-Amz-Expires=300&X-Amz-Signature=91ce25bb09a85b6a8606af9f876ba531d62f37eca8117b2fda99548775f11b38&X-Amz-SignedHeaders=host" alt="XORPHER Logo" width="500px">
   
   # 🚀 XORPHER v2.1
   ### Advanced XOR Encryption Tool for Evasion
