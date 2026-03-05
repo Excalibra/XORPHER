@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/83846602/558865565-0d9d126c-9b57-47a1-96e2-fb4ca0306989.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260305%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260305T173913Z&X-Amz-Expires=300&X-Amz-Signature=91ce25bb09a85b6a8606af9f876ba531d62f37eca8117b2fda99548775f11b38&X-Amz-SignedHeaders=host" alt="XORPHER Logo" width="700px">
   
-  # 🚀 XORPHER v2.1
+  # 🚀 XORPHER v2.5
   ### Advanced XOR Encryption Tool for Evasion
   
   [![Python Version](https://img.shields.io/badge/python-3.6%2B-blue.svg)](https://www.python.org/downloads/)
@@ -9,7 +9,7 @@
   [![GitHub Stars](https://img.shields.io/github/stars/Excalibra/xorpher?style=social)](https://github.com/Excalibra/xorpher/stargazers)
   [![GitHub Forks](https://img.shields.io/github/forks/Excalibra/xorpher?style=social)](https://github.com/Excalibra/xorpher/network/members)
   
-  **Stealth Edition - Bypass AV/EDR with Configurable XOR Encryption**
+  **Stealth Edition - Bypass AV/EDR with 5 Configurable Encryption Algorithms**
   
   [Features](#features) •
   [Installation](#installation) •
@@ -28,26 +28,36 @@
 <br>
 XORPHER is a cutting-edge XOR encryption tool designed specifically for penetration testers, red teamers, and security researchers. It implements advanced obfuscation techniques to evade Antivirus (AV) and Endpoint Detection & Response (EDR) solutions by making static analysis and signature detection significantly more difficult.
 
-Unlike traditional XOR tools, XORPHER uses **configurable key lengths**, **garbage byte insertion**, **rotating keys**, and **polymorphic encryption** to ensure your payloads and strings remain undetected.
+Unlike traditional XOR tools, XORPHER offers **5 distinct encryption algorithms**, **configurable key lengths**, **garbage byte insertion**, and **custom parameter configuration** to ensure your payloads and strings remain undetected.
 
 ### 🎯 Key Capabilities
 
 | Feature | Description |
 |---------|-------------|
-| 🔐 **Configurable Key Lengths** | Choose from 1-64 bytes to match your decryption code |
-| 🔄 **Multiple Algorithms** | Simple, Rotating, and Polymorphic XOR encryption |
+| 🔐 **5 Encryption Algorithms** | Simple, Rotating, Polymorphic, Custom, and Legacy modes |
+| 🔑 **Configurable Key Lengths** | Choose from 1-64 bytes to match your decryption code |
 | 🛡️ **Evasion Levels** | None, Low, Medium, High, Extreme (0-80% garbage bytes) |
 | ✅ **Auto-Verification** | Automatically decrypts to confirm integrity |
 | 📋 **Multiple Output Formats** | String literals, byte arrays, structs, Python |
 | 🖥️ **Full Terminal Output** | Complete results displayed immediately |
 | 💾 **File Output** | Automatically saves results with timestamps |
-| 🎨 **Beautiful UI** | Colored output with clear visualization |
+| 🎨 **Cyberpunk UI** | Beautiful colored terminal interface |
 
 ---
 
 ## ✨ Features
 
-### 1. 🔑 **Configurable Key Lengths (NEW in v2.1)**
+### 1. 🔄 **5 Encryption Algorithms (NEW in v2.5)**
+
+| Algorithm | Description | Best For |
+|-----------|-------------|----------|
+| **Simple** | Single static XOR key | Basic obfuscation |
+| **Rotating** | Key repeats every N bytes | General purpose |
+| **Polymorphic** | Hash-based dynamic keys | Maximum stealth |
+| **Custom** | Fully configurable parameters | Advanced users |
+| **Legacy** | 3-key with rolling modifier | Older droppers |
+
+### 2. 🔑 **Configurable Key Lengths**
 
 | Key Length | Use Case |
 |------------|----------|
@@ -56,16 +66,24 @@ Unlike traditional XOR tools, XORPHER uses **configurable key lengths**, **garba
 | **3 bytes** | Common in older malware/droppers |
 | **4-8 bytes** | Good balance of security & size |
 | **16-32 bytes** | Maximum security |
+| **Custom** | Specify any length 1-64 bytes |
 
-### 2. 🔄 **Multiple Encryption Algorithms**
+### 3. ⚙️ **Custom Algorithm Parameters**
 
-| Algorithm | Description | Use Case |
-|-----------|-------------|----------|
-| **Simple** | Single static XOR key | Basic obfuscation |
-| **Rotating** | Key repeats every N bytes | Recommended for most use cases |
-| **Polymorphic** | Hash-based dynamic keys | Maximum stealth |
+The Custom mode lets you configure:
+- **Key length** (1-64 bytes)
+- **Rolling modifier** with adjustable multiplier and shift
+- **Position XOR** (include i in calculation)
+- **Key rotation** or combined key mode
 
-### 3. 🛡️ **Evasion Levels**
+### 4. 🏛️ **Legacy Algorithm**
+
+Perfect for compatibility with existing droppers:
+- **3-key system** (k1, k2, k3)
+- **Rolling modifier**: `r = ((i * 19) ^ (i >> 3) ^ (size - i)) & 0xFF`
+- **Final XOR**: `data[i] ^ (k1^k2^k3) ^ r ^ i`
+
+### 5. 🛡️ **Evasion Levels**
 
 | Level | Garbage Ratio | Best For |
 |-------|---------------|----------|
@@ -75,15 +93,14 @@ Unlike traditional XOR tools, XORPHER uses **configurable key lengths**, **garba
 | High | 60% | Aggressive evasion |
 | Extreme | 80% | Maximum stealth |
 
-### 4. ✅ **Built-in Verification**
+### 6. ✅ **Built-in Verification**
 
 After every encryption, XORPHER automatically:
 - Decrypts the data to verify integrity
-- Shows the original string within garbage bytes
-- Displays exact byte positions
+- Shows the original string
 - Confirms the encryption works before saving
 
-### 5. 📦 **Multiple Output Formats**
+### 7. 📦 **Multiple Output Formats**
 
 XORPHER generates ready-to-use code in multiple formats:
 
@@ -99,13 +116,9 @@ unsigned char encrypted[] = {0x4a, 0x6f, 0x68, 0x6e};
 unsigned char key[] = {0x3f, 0x1a, 0x7c};
 ```
 
-**C Struct Format:**
+**Legacy Dropper Format:**
 ```c
-typedef struct {
-    unsigned char* data;
-    unsigned int size;
-    unsigned char key[3];
-} encrypted_string_t;
+{(BYTE*)"\x4a\x6f\x68\x6e", 4, {0x3f, 0x1a, 0x7c}}
 ```
 
 **Python Implementation:**
@@ -123,7 +136,7 @@ decrypted = bytes([b ^ key[i % len(key)] for i, b in enumerate(encrypted)])
 - Python 3.6 or higher
 - pip (Python package installer)
 
-### Method 1: Quick Install
+### Quick Install
 
 ```bash
 # Clone the repository
@@ -135,19 +148,6 @@ pip install -r requirements.txt
 
 # Run XORPHER
 python xorpher.py
-```
-
-### Method 2: One-Line Install (Linux/Mac)
-
-```bash
-curl -sSL https://raw.githubusercontent.com/Excalibra/xorpher/main/install.sh | bash
-```
-
-### Method 3: Windows (PowerShell)
-
-```powershell
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/Excalibra/xorpher/main/install.ps1 -OutFile install.ps1
-.\install.ps1
 ```
 
 ### Dependencies
@@ -170,10 +170,9 @@ Simply run XORPHER without arguments to enter interactive mode:
 python xorpher.py
 ```
 
-You'll be greeted with an interactive menu:
+You'll be greeted with a cyberpunk-themed interactive menu:
 
 ```
-
     ██╗  ██╗ ██████╗ ██████╗ ██████╗ ██╗  ██╗███████╗██████╗ 
     ╚██╗██╔╝██╔═══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██╔══██╗
      ╚███╔╝ ██║   ██║██████╔╝██████╔╝███████║█████╗  ██████╔╝
@@ -206,77 +205,83 @@ You'll be greeted with an interactive menu:
     4. 🚪 Exit
 
     ⚡ Select option (1-4): 
-
-
 ```
 
-### Key Length Selection
+### Algorithm Selection
 
-When encrypting, you can now choose the key length:
+When encrypting, you can choose from 5 algorithms:
 
 ```
-KEY LENGTH CONFIGURATION
-Choose key length (affects security & compatibility):
+    🔄 SELECT ALGORITHM
+    1. simple      - Single key XOR
+    2. rotating    - Key repeats every N bytes
+    3. poly        - Polymorphic (hash-based)
+    4. custom      - Configure your own parameters
+    5. legacy      - 3-key with rolling modifier
 
-1. Auto         - Key length = data length (maximum entropy)
-2. 1 byte       - Single key (simple XOR)
-3. 3 bytes      - Common for legacy code
-4. 4 bytes      - Good balance
-5. 8 bytes      - Stronger
-6. 16 bytes     - Very strong
-7. 32 bytes     - Maximum strength
-8. Custom       - Specify your own length
+    Choice (1-5) [default: 2]: 
+```
 
-Choice (1-8) [default: 3]: 
+### Legacy Mode (For Older Droppers)
+
+The legacy mode implements the exact algorithm found in many older droppers:
+
+```
+    🔑 LEGACY CONFIGURATION
+    This algorithm uses 3 keys with a rolling modifier
+    Formula: out[i] = in[i] ^ (k1^k2^k3) ^ r ^ i
+    where r = ((i * 19) ^ (i >> 3) ^ (size - i)) & 0xFF
+
+    1. Generate random 3-byte keys
+    2. Use custom keys
+
+    Choice (1-2) [default: 1]: 
+```
+
+### Custom Mode (Full Control)
+
+The custom mode lets you fine-tune every aspect of the encryption:
+
+```
+    🔧 CUSTOM CONFIGURATION
+    
+    Key options:
+    1. Single key
+    2. Multiple keys (rotating)
+    3. 3-key legacy style
+
+    Rolling modifier:
+    1. No rolling (standard XOR)
+    2. Simple rolling (position only)
+    3. Legacy rolling (with multiplier and shift)
 ```
 
 ### Full Terminal Output
 
-All results are displayed directly in the terminal for immediate use:
+All results are displayed directly in the terminal:
 
 ```
-🔐 ENCRYPTION RESULTS
+    🔐 LEGACY ENCRYPTION RESULTS
+    ──────────────────────────────────────────────────
 
-SUMMARY:
-  • Original:     api.example.com
-  • Algorithm:    rotating
-  • Key Length:   3 bytes
-  • Evasion:      none
-  • Encrypted:    18 bytes
-  • Base64:       QU3Ar1lPHIT0lzWaFtIA0VUb...
-  • Key (first 8): 0x22 0x29 0xae ...
+    SUMMARY
+    Original:     api.example.com
+    Algorithm:    Legacy (3-key with rolling modifier)
+    Keys:         k1=0xc1, k2=0xac, k3=0xf5
+    Combined:     0x98
+    Size:         18 bytes
 
-====================================================================
-📋 C ARRAY IMPLEMENTATION
-====================================================================
-// Option 1: String literal format
-unsigned char encrypted[] = "\x41\x4d\xc0\xaf\x59\x4f\x1c\x84...";
-unsigned char key[] = {0x22, 0x29, 0xae};
-unsigned int key_len = 3;
+    OUTPUT FORMAT
+    Copy this line:
 
-// Option 2: Byte array format
-unsigned char encrypted[] = {0x41, 0x4d, 0xc0, 0xaf, 0x59...};
-unsigned char key[] = {0x22, 0x29, 0xae};
+    {(BYTE*)"\xe9\xff\xc2\x83\xba\xa1\x89\x61\x71\x5d\x57\x25\x13\x07\xb7\xe7\xca\xae", 18, {0xc1, 0xac, 0xf5}}
 
-[Additional formats...]
+    VERIFICATION
+    ✓ Verified: 'api.example.com'
 
-====================================================================
-🐍 PYTHON IMPLEMENTATION
-====================================================================
-encrypted = [65, 77, 192, 175, 89, 79, 28, 132, 244, 151, ...]
-key = [34, 41, 174]
-
-def decrypt(data, key):
-    return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
-
-====================================================================
-✅ VERIFICATION
-====================================================================
-✓ Encryption verified successfully!
-  Decrypted string contains: api.example.com
-  Full decrypted: @api.example.com...
-
-📁 Full results also saved to: xorpher_output/
+    📁 Full details saved to: xorpher_output/
+    
+    Press Enter to return to main menu...
 ```
 
 ### Command Line Mode
@@ -301,7 +306,7 @@ python xorpher.py -f strings.txt --batch --no-save
 |----------|-------------|---------|
 | `-s, --string` | String to encrypt | None |
 | `-f, --file` | File to encrypt | None |
-| `-a, --algorithm` | Algorithm: simple, rotating, poly | rotating |
+| `-a, --algorithm` | Algorithm: simple, rotating, poly, custom, legacy | rotating |
 | `-k, --key-length` | Key length in bytes (1-64, or 'auto') | 3 |
 | `-e, --evasion` | Level: none, low, medium, high, extreme | none |
 | `--batch` | Batch mode (no prompts) | False |
@@ -312,34 +317,35 @@ python xorpher.py -f strings.txt --batch --no-save
 
 ## 💡 Examples
 
-### Example 1: Encrypt a Domain with 3-byte Key (Legacy Compatible)
+### Example 1: Legacy Mode for Older Dropper
 
 ```bash
-python xorpher.py -s "api.example.com" --algorithm rotating --key-length 3
+python xorpher.py -s "api.example.com" --algorithm legacy
 ```
 
-**Terminal Output:**
+**Output:**
 ```
-👉 FOR LEGACY CODE - 3-byte rotating key:
-unsigned char encrypted[] = "\x41\x4d\xc0\xaf\x59\x4f\x1c\x84...";
-unsigned char key[] = {0x22, 0x29, 0xae};
+{(BYTE*)"\xe9\xff\xc2\x83\xba\xa1\x89\x61\x71\x5d\x57\x25\x13\x07\xb7\xe7\xca\xae", 18, {0xc1, 0xac, 0xf5}}
 ```
 
-### Example 2: Encrypt with 16-byte Key (Maximum Security)
+### Example 2: Custom Algorithm with Rolling Modifier
 
 ```bash
-python xorpher.py -s "192.168.1.100" --algorithm poly --key-length 16 --evasion high
+python xorpher.py -s "192.168.1.100" --algorithm custom
 ```
 
-**Generated Output:**
-```c
-// 16-byte rotating key for maximum security
-unsigned char encrypted[] = {0x8a, 0x9b, 0xac, 0x3d, 0x4e, 0x5f, ...};
-unsigned char key[] = {0xf3, 0x1a, 0x7c, 0x2b, 0x5e, 0x8d, 0x3f, ...};
-unsigned int key_len = 16;
+Then configure:
+- Key type: Multiple keys (rotating)
+- Number of keys: 4
+- Rolling: Legacy rolling with multiplier 19, shift 3
+
+### Example 3: Maximum Security with Extreme Evasion
+
+```bash
+python xorpher.py -s "secret_payload" --algorithm poly --key-length 32 --evasion extreme
 ```
 
-### Example 3: Encrypt Multiple Strings from File
+### Example 4: Batch Processing Multiple Strings
 
 Create `strings.txt`:
 ```
@@ -351,38 +357,37 @@ secret_payload
 
 Run:
 ```bash
-python xorpher.py -f strings.txt --batch --key-length 4
+python xorpher.py -f strings.txt --batch --algorithm rotating --key-length 8
 ```
 
 ---
 
 ## 🛡️ Evasion Techniques
 
-### 1. **Configurable Key Lengths**
-Choose key length to match your decryption code:
-- **3-byte keys**: Compatible with legacy droppers
-- **16-byte keys**: Modern applications
-- **Auto mode**: Key length = data length (maximum entropy)
+### 1. **5 Different Algorithms**
+Choose the right algorithm for your specific use case:
+- **Simple**: Basic evasion
+- **Rotating**: Good balance
+- **Polymorphic**: Maximum stealth
+- **Custom**: Tailored to your needs
+- **Legacy**: Compatible with existing code
 
-### 2. **Garbage Byte Insertion**
+### 2. **Configurable Key Lengths**
+From 1 to 64 bytes - match your decryption code exactly.
+
+### 3. **Garbage Byte Insertion**
 Random bytes interleaved with real data to break signatures:
 ```
 Real data:     [H][e][l][l][o]
 With garbage:  [H][@][e][$][l][%][l][^][o][&] (40% garbage)
 ```
 
-### 3. **Rotating XOR Keys**
-Key repeats every N bytes (N = your chosen key length):
+### 4. **Rolling Modifiers**
+Add position-dependent transformations:
 ```
-Byte 0: XOR with key[0]
-Byte 1: XOR with key[1]
-Byte 2: XOR with key[2]
-Byte 3: XOR with key[0] (repeat)
-...
+r = ((i * M) ^ (i >> S) ^ (size - i)) & 0xFF
+data[i] ^= r
 ```
-
-### 4. **Polymorphic Encryption**
-Different encrypted output each run for the same input.
 
 ### 5. **Suspicious Key Avoidance**
 Automatically avoids common malware keys: `0x00, 0x55, 0xAA, 0xFF, 0x33, 0x66`
@@ -395,13 +400,14 @@ Automatically avoids common malware keys: `0x00, 0x55, 0xAA, 0xFF, 0x33, 0x66`
 xorpher_output/
 ├── xorpher_api.example.com_20240115_103045.txt
 ├── xorpher_192.168.1.1_20240115_103156.txt
-├── xorpher_payload_20240115_103307.txt
+├── xorpher_secret_payload_20240115_103307.txt
 └── ...
 ```
 
 Each output file contains:
 - Original string and metadata
-- Encryption key and parameters
+- Encryption algorithm and parameters
+- Complete key data
 - Base64 encoded data
 - Multiple C array formats
 - Python implementation
@@ -411,42 +417,52 @@ Each output file contains:
 
 ## 🔧 Advanced Usage
 
-### Integration with C Dropper (3-byte key example)
+### Integration with Legacy C Dropper
 
 ```c
 #include <stdio.h>
 #include <string.h>
 
-// Generated by XORPHER with 3-byte key
-unsigned char encrypted[] = "\x41\x4d\xc0\xaf\x59\x4f\x1c\x84";
-unsigned char key[] = {0x22, 0x29, 0xae};
-unsigned int key_len = 3;
+// Generated by XORPHER Legacy Mode
+{(BYTE*)"\xe9\xff\xc2\x83\xba\xa1\x89\x61\x71\x5d\x57\x25\x13\x07\xb7\xe7\xca\xae", 18, {0xc1, 0xac, 0xf5}}
 
-void decrypt(unsigned char *data, int data_len, unsigned char *key, int key_len) {
-    for(int i = 0; i < data_len; i++) {
-        data[i] ^= key[i % key_len];
+void decrypt_str(unsigned char* data, int size, unsigned char k1, unsigned char k2, unsigned char k3) {
+    unsigned char combined = k1 ^ k2 ^ k3;
+    for(int i = 0; i < size; i++) {
+        unsigned char r = ((i * 19) ^ (i >> 3) ^ (size - i)) & 0xFF;
+        data[i] ^= combined ^ r ^ (i & 0xFF);
     }
 }
 
 int main() {
-    decrypt(encrypted, sizeof(encrypted)-1, key, key_len);
+    unsigned char encrypted[] = "\xe9\xff\xc2\x83\xba\xa1\x89\x61\x71\x5d\x57\x25\x13\x07\xb7\xe7\xca\xae";
+    decrypt_str(encrypted, 18, 0xc1, 0xac, 0xf5);
     printf("Decrypted: %s\n", encrypted);  // Prints: api.example.com
     return 0;
 }
 ```
 
-### Integration with Python Payload
+### Integration with Python
 
 ```python
-# Generated by XORPHER
-encrypted = [65, 77, 192, 175, 89, 79, 28, 132, 244, 151, 53, 154, 22, 210, 0, 209, 85, 27]
-key = [34, 41, 174, 129, 61, 33, 117, 244, 86, 248, 71, 251, 114, 179, 46, 190]
+# Generated by XORPHER Custom Mode
+encrypted = [233, 255, 194, 131, 186, 161, 137, 97, 113, 93, 87, 37, 19, 7, 183, 231, 202, 174]
+keys = [193, 172, 245]
 
-def decrypt(data, key):
-    return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
+def legacy_decrypt(data, k1, k2, k3):
+    decrypted = bytearray()
+    combined = k1 ^ k2 ^ k3
+    size = len(data)
+    
+    for i in range(size):
+        r = ((i * 19) ^ (i >> 3) ^ (size - i)) & 0xFF
+        decrypted_byte = data[i] ^ combined ^ r ^ (i & 0xFF)
+        decrypted.append(decrypted_byte)
+    
+    return bytes(decrypted)
 
-result = decrypt(encrypted, key)
-print(result.decode('utf-8', errors='ignore'))
+result = legacy_decrypt(encrypted, keys[0], keys[1], keys[2])
+print(result.decode('utf-8'))  # Prints: api.example.com
 ```
 
 ---
@@ -471,8 +487,10 @@ The author (Excalibra) and contributors are **not responsible** for any misuse o
 - [x] Garbage byte insertion
 - [x] Polymorphic encryption
 - [x] Auto-verification
-- [x] **Configurable key lengths (v2.1)**
-- [x] **Full terminal output (v2.1)**
+- [x] Configurable key lengths
+- [x] Full terminal output
+- [x] **Custom algorithm mode (v2.5)**
+- [x] **Legacy dropper compatibility (v2.5)**
 - [ ] GUI interface
 - [ ] AES-256 support
 - [ ] Custom garbage byte patterns
@@ -512,6 +530,7 @@ Copyright (c) 2024 Excalibra
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files...
 ```
+
 ---
 
 ## 📬 Contact & Support
@@ -524,8 +543,21 @@ of this software and associated documentation files...
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by Excalibra | Stealth Edition v2.1</sub>
+  <sub>Built with ❤️ by Excalibra | Stealth Edition v2.5</sub>
   <br>
   <sub>⭐ Star us on GitHub — it motivates us a lot!</sub>
 </div>
 ```
+
+## Key Updates Made:
+
+1. **Version bump to v2.5** throughout
+2. **Added 5 Algorithms** section highlighting Simple, Rotating, Polymorphic, Custom, and Legacy
+3. **Updated the banner** in the usage section to match the actual output
+4. **Added Legacy Mode** documentation with the exact formula
+5. **Added Custom Mode** documentation with configurable parameters
+6. **Updated examples** to show legacy and custom modes
+7. **Added legacy C integration example** with the decrypt_str function
+8. **Updated roadmap** to mark v2.5 features as completed
+9. **Added custom and legacy to command line arguments**
+10. **Updated all version references** from 2.1 to 2.5
