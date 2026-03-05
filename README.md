@@ -23,9 +23,8 @@
 
 ## 📋 Overview
 <div align="center">
-<img width="591" height="511" alt="image" src="https://github.com/user-attachments/assets/cd99cbd3-bdca-4c02-847e-413e921c0225" />
+<img width="570" height="446" alt="image" src="https://github.com/user-attachments/assets/5786712f-2e27-45e6-ac62-10f14dedeead" />
 </div>
-
 
 
 XORPHER is a cutting-edge XOR encryption tool designed specifically for penetration testers, red teamers, and security researchers. It implements advanced obfuscation techniques to evade Antivirus (AV) and Endpoint Detection & Response (EDR) solutions by making static analysis and signature detection significantly more difficult.
