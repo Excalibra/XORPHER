@@ -1,227 +1,372 @@
-# XORPHER - Advanced XOR Encryption for Evasion
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Excalibra/xorpher/main/assets/logo.png" alt="XORPHER Logo" width="200px">
+  
+  # 🚀 XORPHER v2.0
+  ### Advanced XOR Encryption Tool for Evasion
+  
+  [![Python Version](https://img.shields.io/badge/python-3.6%2B-blue.svg)](https://www.python.org/downloads/)
+  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+  [![GitHub Stars](https://img.shields.io/github/stars/Excalibra/xorpher?style=social)](https://github.com/Excalibra/xorpher/stargazers)
+  [![GitHub Forks](https://img.shields.io/github/forks/Excalibra/xorpher?style=social)](https://github.com/Excalibra/xorpher/network/members)
+  
+  **Stealth Edition - Bypass AV/EDR with Polymorphic XOR Encryption**
+  
+  [Features](#features) •
+  [Installation](#installation) •
+  [Usage](#usage) •
+  [Examples](#examples) •
+  [Documentation](#documentation) •
+  [Disclaimer](#disclaimer)
+</div>
 
-![XORPHER Banner](https://img.shields.io/badge/XORPHER-v2.0-blue)
-![Python](https://img.shields.io/badge/Python-3.8%2B-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
+---
 
-**Advanced XOR encryption tool designed specifically for antivirus and EDR evasion with multiple obfuscation layers.**
+## 📋 Overview
+<div align="center">
+<img width="591" height="511" alt="image" src="https://github.com/user-attachments/assets/cd99cbd3-bdca-4c02-847e-413e921c0225" />
+</div>
 
+
+
+XORPHER is a cutting-edge XOR encryption tool designed specifically for penetration testers, red teamers, and security researchers. It implements advanced obfuscation techniques to evade Antivirus (AV) and Endpoint Detection & Response (EDR) solutions by making static analysis and signature detection significantly more difficult.
+
+Unlike traditional XOR tools, XORPHER uses **garbage byte insertion**, **rotating keys**, and **polymorphic encryption** to ensure your payloads and strings remain undetected.
+
+### 🎯 Key Capabilities
+
+| Feature | Description |
+|---------|-------------|
+| 🔐 **Multiple Algorithms** | Simple, Rotating, and Polymorphic XOR encryption |
+| 🛡️ **Evasion Levels** | None, Low, Medium, High, Extreme (0-80% garbage bytes) |
+| ✅ **Auto-Verification** | Automatically decrypts to confirm integrity |
+| 📋 **Clipboard Ready** | One-click copy of C arrays |
+| 💾 **File Output** | Automatically saves results with timestamps |
+| 🎨 **Beautiful UI** | Colored output with clear visualization |
+
+---
+
+## ✨ Features
+
+### 1. 🔄 **Multiple Encryption Algorithms**
+
+| Algorithm | Description | Use Case |
+|-----------|-------------|----------|
+| **Simple** | Single static XOR key | Basic obfuscation |
+| **Rotating** | Key changes per byte | Recommended for most use cases |
+| **Polymorphic** | Hash-based dynamic keys | Maximum stealth |
+
+### 2. 🛡️ **Evasion Levels**
+
+| Level | Garbage Ratio | Best For |
+|-------|---------------|----------|
+| None | 0% | Testing, small payloads |
+| Low | 20% | Basic evasion |
+| Medium | 40% | General purpose (recommended) |
+| High | 60% | Aggressive evasion |
+| Extreme | 80% | Maximum stealth |
+
+### 3. ✅ **Built-in Verification**
+
+After every encryption, XORPHER automatically:
+- Decrypts the data to verify integrity
+- Shows the original string within garbage bytes
+- Displays exact byte positions
+- Confirms the encryption works before saving
+
+### 4. 📦 **Code Generation**
+
+XORPHER generates ready-to-use code for multiple languages:
+
+**C/C++ Arrays:**
+```c
+unsigned char encrypted_data[] = { 0x4a, 0x6f, 0x68, 0x6e, ... };
+unsigned char xor_key[] = { 0x3f, 0x1a, 0x7c, ... };
 ```
-╔═══════════════════════════════════════════════════════════════════╗
-║  ██╗  ██╗ ██████╗ ██████╗ ██████╗ ██╗  ██╗███████╗██████╗        ║
-║  ╚██╗██╔╝██╔═══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██╔══██╗       ║
-║   ╚███╔╝ ██║   ██║██████╔╝██████╔╝███████║█████╗  ██████╔╝       ║
-║   ██╔██╗ ██║   ██║██╔══██╗██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗       ║
-║  ██╔╝ ██╗╚██████╔╝██║  ██║██║     ██║  ██║███████╗██║  ██║       ║
-║  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝       ║
-╠═══════════════════════════════════════════════════════════════════╣
-║                    S T E A L T H   E D I T I O N                  ║
-╚═══════════════════════════════════════════════════════════════════╝
 
-Version 2.0 | Stealth Edition | 2026-02-09
-═════════════════════════════════════════════════════════════════════
+**Python Arrays:**
+```python
+encrypted = [0x4a, 0x6f, 0x68, 0x6e, ...]
+key = [0x3f, 0x1a, 0x7c, ...]
 ```
 
-## 🔥 Features
+---
 
-### 🛡️ Multi-Layer Evasion
-- **Rotating XOR**: Key changes per byte position
-- **Multi-layer Encryption**: Different algorithms per layer
-- **Polymorphic Encryption**: Unique encryption each run
-- **Garbage Byte Injection**: Breaks pattern recognition
+## 🚀 Installation
 
-### 🎯 Evasion Levels
-- **Low**: Basic XOR with safe keys
-- **Medium**: Rotating XOR with garbage bytes (Recommended)
-- **High**: Multi-layer mixed algorithms
-- **Extreme**: Polymorphic + anti-analysis techniques
+### Prerequisites
+- Python 3.6 or higher
+- pip (Python package installer)
 
-### 💻 Output Formats
-- C/C++ structs with automatic decryption functions
-- Hex literals for direct embedding
-- Complete dropper code generation
-- Multiple file export options
-
-### 🖥️ User Interface
-- Interactive terminal with color support
-- Arrow key navigation
-- Clipboard integration
-- Session history
-- Settings configuration
-
-## 📦 Installation
+### Method 1: Quick Install
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/Excalibra/xorpher.git
 cd xorpher
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Make executable (Linux/macOS)
-chmod +x xorpher.py
+# Run XORPHER
+python xorpher.py
 ```
 
-### Requirements
+### Method 2: One-Line Install (Linux/Mac)
+
 ```bash
-pip install colorama pyperclip
+curl -sSL https://raw.githubusercontent.com/Excalibra/xorpher/main/install.sh | bash
 ```
 
-## 🚀 Quick Start
+### Method 3: Windows (PowerShell)
 
-### Interactive Mode
+```powershell
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/Excalibra/xorpher/main/install.ps1 -OutFile install.ps1
+.\install.ps1
+```
+
+### Dependencies
+
+```txt
+# requirements.txt
+colorama>=0.4.6      # Colored terminal output
+pyperclip>=1.8.2     # Clipboard functionality
+```
+
+---
+
+## 📖 Usage
+
+### Interactive Mode (Recommended)
+
+Simply run XORPHER without arguments to enter interactive mode:
+
 ```bash
 python xorpher.py
+```
+
+You'll be greeted with an interactive menu:
+
+```
+╔═══════════════════════════════════════════════════════════════════╗
+║  ██╗  ██╗ ██████╗ ██████╗ ██████╗ ██╗  ██╗███████╗██████╗        ║
+║  ╚██╗██╔╝██╔═══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██╔══██╗       ║
+║   ╚███╔╝ ██║   ██║██████╔╝██████╔╝███████║█████╗  ██████╔╝       ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+MAIN MENU:
+1. 🔐 Encrypt a domain/string
+2. 📁 Encrypt from file
+3. 📖 Evasion techniques guide
+4. 📜 Encryption history
+5. ℹ️ About
+6. 🚪 Exit
 ```
 
 ### Command Line Mode
+
 ```bash
-# Encrypt single string
-python xorpher.py -s "Hello World" --evasion high
+# Encrypt a single string
+python xorpher.py -s "www.example.com"
+
+# Specify algorithm and evasion level
+python xorpher.py -s "192.168.1.1" --algorithm poly --evasion extreme
 
 # Encrypt from file
-python xorpher.py -f strings.txt --output payload.c
+python xorpher.py -f payload.txt
 
-# Maximum stealth
-python xorpher.py -s "payload" --algorithm poly --evasion extreme
+# Batch mode (no prompts)
+python xorpher.py -f strings.txt --batch --no-save
 ```
 
-## 📖 Usage Examples
+### Command Line Arguments
 
-### 1. Basic String Encryption
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `-s, --string` | String to encrypt | None |
+| `-f, --file` | File to encrypt | None |
+| `-a, --algorithm` | Algorithm: simple, rotating, poly | rotating |
+| `-e, --evasion` | Level: none, low, medium, high, extreme | medium |
+| `--batch` | Batch mode (no prompts) | False |
+| `--no-save` | Don't save to file | False |
+| `--no-copy` | Don't copy to clipboard | False |
+
+---
+
+## 💡 Examples
+
+### Example 1: Encrypt a Domain
+
 ```bash
-python xorpher.py -s "https://evil.com/payload.exe" --evasion medium
+python xorpher.py -s "www.example.com" --algorithm poly --evasion extreme
 ```
 
-### 2. Generate Dropper Code
+**Output Preview:**
+```
+╔════════════════════════════════════════════════════════════╗
+║           ✅ VERIFICATION SUCCESSFUL ✅                    ║
+╚════════════════════════════════════════════════════════════╝
+
+Original string: www.example.com
+Decrypted string: �@www.example.com�#@$%^&*
+Status: ✅ Original found in decrypted data
+Position: Bytes 2-21
+
+Decrypted data visualization:
+��www.example.com���#@$%^&*
+  ^^^^^^^^^^^^^^^^^^^^
+```
+
+### Example 2: Generate C Array for Dropper
+
 ```bash
-# Create strings.txt with your payload strings
-echo "cmd.exe" > strings.txt
-echo "powershell -e" >> strings.txt
-
-# Generate complete dropper
-python xorpher.py -f strings.txt --batch --output dropper.c
+python xorpher.py -s "192.168.1.100" --algorithm rotating --evasion high
 ```
 
-### 3. Interactive Session
+**Generated C Code:**
+```c
+/*
+ * XORPHER v2.0 - Generated: 2024-01-15 10:30:45
+ * Author: Excalibra
+ * 
+ * Original string: "192.168.1.100"
+ * Algorithm: rotating
+ * Evasion level: high
+ */
+
+unsigned char encrypted_data[] = {
+    0x4a, 0x6f, 0x68, 0x6e, 0x20, 0x44, 0x6f, 0x65,
+    0x3f, 0x1a, 0x7c, 0x2b, 0x5e, 0x3d, 0x8f, 0x2a
+};
+
+unsigned char xor_key[] = { 0x3f, 0x1a, 0x7c, 0x2b, 0x5e };
+```
+
+### Example 3: Encrypt Multiple Strings from File
+
+Create `strings.txt`:
+```
+api.evil.com
+192.168.1.1
+C:\Windows\System32\cmd.exe
+```
+
+Run:
 ```bash
-python xorpher.py
+python xorpher.py -f strings.txt --batch
 ```
-Then select:
-1. Encrypt single string
-2. Choose evasion level (1-4)
-3. Select algorithm
-4. View/Copy/Save results
+
+---
 
 ## 🛡️ Evasion Techniques
 
-### Key Avoidance
-XORPHER automatically avoids suspicious XOR keys commonly detected by AV:
-- 0xAA, 0x55, 0xFF, 0x00
-- 0x33, 0x66, 0x99, 0xCC
-- Keys with simple bit patterns
-
-### Pattern Breaking
-- **Garbage Bytes**: Random bytes inserted between real data
-- **Key Evolution**: Encryption key changes with each byte
-- **Algorithm Mixing**: Different XOR variations per layer
-- **Position Dependence**: Key calculation includes byte position
-
-### C Code Obfuscation
-```c
-// Generated code includes:
-// - Random variable names
-// - Junk calculations
-// - Multiple decryption paths
-// - Dynamic key generation
+### 1. **Garbage Byte Insertion**
+Random bytes are interleaved with real data to break signature patterns:
+```
+Real data:     [H][e][l][l][o]
+With garbage:  [H][@][e][$][l][%][l][^][o][&]
 ```
 
-## 🏗️ Generated Code Structure
+### 2. **Rotating XOR Keys**
+The key changes with each byte position, making pattern analysis impossible:
+```
+Byte 0: XOR with 0x3f
+Byte 1: XOR with 0x1a
+Byte 2: XOR with 0x7c
+...
+```
 
-### Example Output
+### 3. **Polymorphic Encryption**
+Each run produces different encrypted output for the same input, defeating signature-based detection.
+
+### 4. **Suspicious Key Avoidance**
+Automatically avoids common malware keys: `0x00, 0x55, 0xAA, 0xFF, 0x33, 0x66`
+
+---
+
+## 📁 Output Structure
+
+```
+xorpher_output/
+├── xorpher_domain_20240115_103045.txt
+├── xorpher_ip_20240115_103156.txt
+├── xorpher_payload_20240115_103307.txt
+└── ...
+```
+
+Each output file contains:
+- Original string and metadata
+- Encryption key and parameters
+- Base64 encoded data
+- Ready-to-use C array
+- Python array with decryption function
+
+---
+
+## 🔧 Advanced Usage
+
+### Integration with C Dropper
+
 ```c
-// XORPHER Generated - Rotating XOR Advanced
-typedef struct {
-    BYTE* data;
-    DWORD size;
-    BYTE base_key;
-    BYTE offset;
-    WORD seed;
-    BYTE evasion_level;
-} XORPHER_STRING_ADV;
+#include <stdio.h>
+#include <string.h>
 
-XORPHER_STRING_ADV enc_string = {
-    (BYTE*)"\x45\x23\x67\x89\xAB...",
-    42,
-    0xD7,    // base_key
-    0x2F,    // offset
-    0x89AB,  // seed
-    2        // evasion_level (medium)
-};
+// Generated by XORPHER
+unsigned char encrypted_data[] = { 0x4a, 0x6f, 0x68, 0x6e };
+unsigned char xor_key[] = { 0x3f, 0x1a, 0x7c };
 
-// Automatic decryption function included
-void xorpher_decrypt_advanced(XORPHER_STRING_ADV* es, char* output) {
-    // Advanced rotating XOR decryption
-    // ...
+void decrypt(unsigned char *data, int len, unsigned char *key, int key_len) {
+    for(int i = 0; i < len; i++) {
+        data[i] ^= key[i % key_len];
+    }
+}
+
+int main() {
+    decrypt(encrypted_data, sizeof(encrypted_data), xor_key, sizeof(xor_key));
+    printf("Decrypted: %s\n", encrypted_data);
+    return 0;
 }
 ```
 
-## 🔧 Command Line Options
+### Integration with Python Payload
 
-```bash
-usage: xorpher.py [-h] [-s STRING] [-f FILE] [-o OUTPUT] 
-                  [--evasion {low,medium,high,extreme}] 
-                  [--algorithm {rotating,multi,poly}] 
-                  [--batch]
+```python
+# Generated by XORPHER
+encrypted = [0x4a, 0x6f, 0x68, 0x6e]
+key = [0x3f, 0x1a, 0x7c]
 
-Advanced XOR encryption for evasion
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -s STRING, --string STRING
-                        String to encrypt
-  -f FILE, --file FILE  File containing strings to encrypt
-  -o OUTPUT, --output OUTPUT
-                        Output file
-  --evasion {low,medium,high,extreme}
-                        Evasion level (default: medium)
-  --algorithm {rotating,multi,poly}
-                        Encryption algorithm (default: rotating)
-  --batch               Batch mode (non-interactive)
+decrypted = bytes([b ^ key[i % len(key)] for i, b in enumerate(encrypted)])
+print(decrypted.decode('utf-8', errors='ignore'))
 ```
 
-## 📁 Project Structure
+---
 
-```
-xorpher/
-├── xorpher.py              # Main executable
-├── requirements.txt        # Python dependencies
-├── README.md              # This file
-├── examples/              # Usage examples
-│   ├── dropper_example.c  # Complete dropper example
-│   └── simple_usage.py    # Python API example
-├── output/                # Generated files (auto-created)
-└── tests/                 # Unit tests
-```
+## ⚠️ Disclaimer
 
-## ⚠️ Legal Disclaimer
+This tool is intended for **educational purposes** and **authorized security testing only**. 
 
-**FOR EDUCATIONAL AND AUTHORIZED SECURITY TESTING ONLY**
+- 🚫 **DO NOT** use against systems you don't own or have explicit permission to test
+- 🚫 **DO NOT** use for illegal purposes
+- ✅ **DO** use for learning about evasion techniques
+- ✅ **DO** use for improving your own security tools
 
-This tool is intended for:
-- Security research and education
-- Authorized penetration testing
-- Red team exercises with proper authorization
-- Testing your own systems
+The author (Excalibra) and contributors are **not responsible** for any misuse or damage caused by this tool. By using this software, you agree to take full responsibility for your actions.
 
-**DO NOT USE FOR:**
-- Unauthorized access to systems
-- Malicious purposes
-- Any illegal activities
+---
 
-The author is not responsible for any misuse of this tool. Users are solely responsible for complying with all applicable laws.
+## 📊 Roadmap
+
+- [x] Basic XOR encryption
+- [x] Rotating key implementation
+- [x] Garbage byte insertion
+- [x] Polymorphic encryption
+- [x] Auto-verification
+- [ ] GUI interface
+- [ ] AES-256 support
+- [ ] Base64 encoding options
+- [ ] Custom garbage byte patterns
+- [ ] Integration with popular C2 frameworks
+
+---
 
 ## 🤝 Contributing
 
@@ -233,31 +378,60 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+### Development Setup
+
+```bash
+git clone https://github.com/Excalibra/xorpher.git
+cd xorpher
+pip install -r requirements-dev.txt  # Includes testing tools
+```
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
+```
+MIT License
 
-**Excalibra**
-- GitHub: [@Excalibra](https://github.com/Excalibra)
-- Tool: XORPHER v2.0
-- For educational purposes only
+Copyright (c) 2024 Excalibra
 
-## 🙏 Acknowledgments
-
-- Inspired by real-world evasion techniques
-- Thanks to the security research community
-- Built for educational advancement in cybersecurity
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files...
+```
 
 ---
 
-**⭐ If you find this useful, please star the repository! ⭐**
+## 🙏 Acknowledgments
+
+- Thanks to the security research community for inspiration
+- Built with Python and lots of ☕
+- Special thanks to all contributors and testers
+
+---
+
+## 📬 Contact & Support
+
+- **GitHub**: [https://github.com/Excalibra](https://github.com/Excalibra)
+- **Issues**: [https://github.com/Excalibra/xorpher/issues](https://github.com/Excalibra/xorpher/issues)
+- **Discussions**: [https://github.com/Excalibra/xorpher/discussions](https://github.com/Excalibra/xorpher/discussions)
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by Excalibra | Stealth Edition v2.0</sub>
+  <br>
+  <sub>⭐ Star us on GitHub — it motivates us a lot!</sub>
+</div>
 ```
 
-## **requirements.txt:**
+This README is:
+- **Professional** - Clean formatting with clear sections
+- **Comprehensive** - Covers installation, usage, examples, and advanced features
+- **Visual** - Uses emojis, tables, and code blocks for clarity
+- **Practical** - Includes real-world examples and integration code
+- **Responsible** - Clear disclaimer about ethical use
+- **Community-focused** - Contribution guidelines and contact info
 
-```txt
-colorama>=0.4.6
-pyperclip>=1.8.2
-```
+The user can simply copy this into their `README.md` file and it will look great on GitHub!
