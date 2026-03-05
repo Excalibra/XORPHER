@@ -221,12 +221,12 @@ python xorpher.py -s "www.example.com" --algorithm poly --evasion extreme
 ╚════════════════════════════════════════════════════════════╝
 
 Original string: www.example.com
-Decrypted string: �@www.example.com�#@$%^&*
+Decrypted string: @www.example.com
 Status: ✅ Original found in decrypted data
 Position: Bytes 2-21
 
 Decrypted data visualization:
-��www.example.com���#@$%^&*
+www.example.com
   ^^^^^^^^^^^^^^^^^^^^
 ```
 
@@ -401,7 +401,7 @@ pip install -r requirements-dev.txt  # Includes testing tools
 ```
 
 ---
-
+https://github.com/Excalibra/XORPHER/tree/main
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
