@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 ╔═══════════════════════════════════════════════════════════════════╗
-║                         XORPHER v2.0                              ║
+║                         XORPHER v2.1                              ║
 ║               Ultimate XOR Encryption for Evasion                  ║
+║              NEW: Configurable Key Length Support!                 ║
 ╚═══════════════════════════════════════════════════════════════════╝
 GitHub: https://github.com/Excalibra
 Author: Excalibra
@@ -50,22 +51,24 @@ XORPHER_ART = f"""{Fore.CYAN}
 ║  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝       ║
 ╠═══════════════════════════════════════════════════════════════════╣
 ║                    S T E A L T H   E D I T I O N                  ║
+║                    v2.1 - Configurable Key Length                  ║
 ╚═══════════════════════════════════════════════════════════════════╝
 {Fore.YELLOW}
           GitHub: https://github.com/Excalibra
           Author: Excalibra
-          Version: 2.0.0
+          Version: 2.1.0
 {Fore.CYAN}═════════════════════════════════════════════════════════════════════{Style.RESET_ALL}
 """
 
 class EncryptionResult:
     """Class for encryption results"""
-    def __init__(self, original, encrypted, key, algorithm, evasion_level, c_array, python_array, base64_str):
+    def __init__(self, original, encrypted, key, algorithm, evasion_level, key_length, c_array, python_array, base64_str):
         self.original = original
         self.encrypted = encrypted
         self.key = key
         self.algorithm = algorithm
         self.evasion_level = evasion_level
+        self.key_length = key_length
         self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.c_array = c_array
         self.python_array = python_array
@@ -110,14 +113,6 @@ class XorpherUI:
         print(f"\n{Fore.MAGENTA}{'='*60}")
         print(f"{Fore.YELLOW}{title:^60}")
         print(f"{Fore.MAGENTA}{'='*60}{Style.RESET_ALL}")
-    
-    @staticmethod
-    def print_verification_success():
-        """Print verification success animation"""
-        print(f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════╗")
-        print(f"║           ✅ VERIFICATION SUCCESSFUL ✅               ║")
-        print(f"║      Encryption/Decryption cycle works perfectly!      ║")
-        print(f"╚══════════════════════════════════════════════════════════╝{Style.RESET_ALL}")
 
 class XorpherEngine:
     """Core encryption engine"""
@@ -125,8 +120,20 @@ class XorpherEngine:
     def __init__(self):
         self.suspicious_keys = [0x00, 0x55, 0xAA, 0xFF, 0x33, 0x66, 0x99, 0xCC]
     
-    def generate_key(self, length: int, algorithm: str) -> List[int]:
-        """Generate encryption key based on algorithm"""
+    def generate_key(self, length: int, algorithm: str, key_length: int = None) -> List[int]:
+        """Generate encryption key based on algorithm with specified key length"""
+        
+        # Determine actual key length to use
+        if key_length is None:
+            # Default behavior - key length equals data length for rotating
+            if algorithm == "simple":
+                actual_length = 1
+            else:
+                actual_length = length
+        else:
+            # User specified key length
+            actual_length = key_length
+        
         if algorithm == "simple":
             # Single key for all bytes
             key_byte = random.randint(1, 255)
@@ -134,29 +141,19 @@ class XorpherEngine:
                 key_byte = random.randint(1, 255)
             return [key_byte]
         
-        elif algorithm == "rotating":
-            # Different key for each position
+        elif algorithm == "rotating" or algorithm == "poly":
+            # Generate key of specified length
             key = []
-            for i in range(length):
+            for i in range(actual_length):
                 key_byte = random.randint(1, 255)
                 while key_byte in self.suspicious_keys:
                     key_byte = random.randint(1, 255)
                 key.append(key_byte)
             return key
         
-        elif algorithm == "poly":
-            # Polymorphic - based on hash
-            seed = str(random.getrandbits(128))
-            hash_val = hashlib.md5(seed.encode()).hexdigest()
-            key = []
-            for i in range(length):
-                key_byte = (int(hash_val[i % 32], 16) << 4) | random.randint(1, 15)
-                key.append(key_byte)
-            return key
-        
         else:  # rotating (default)
             key = []
-            for i in range(length):
+            for i in range(actual_length):
                 key_byte = random.randint(1, 255)
                 while key_byte in self.suspicious_keys:
                     key_byte = random.randint(1, 255)
@@ -172,37 +169,21 @@ class XorpherEngine:
         for i, byte in enumerate(encrypted_data):
             decrypted.append(byte ^ key[i % key_len])
         
-        # If we know original length, extract just the real data
         if original_length:
-            # Find the original string by looking for valid UTF-8 sequences
-            # This is a simplification - in reality we'd need to track positions
-            decoded = decrypted.decode('utf-8', errors='ignore')
-            return decoded[:original_length]
+            return decrypted.decode('utf-8', errors='ignore')[:original_length]
         else:
             return decrypted.decode('utf-8', errors='ignore')
     
-    def verify_encryption(self, original: str, encrypted: bytes, key: List[int]) -> Tuple[bool, str]:
+    def verify_encryption(self, original: str, encrypted: bytes, key: List[int]) -> bool:
         """Verify that encryption/decryption works correctly"""
         try:
-            # Decrypt the data
             decrypted = self.decrypt(encrypted, key)
-            
-            # Check if original is contained in decrypted string
-            # (because of garbage bytes, the decrypted string will have extra chars)
-            if original in decrypted:
-                # Find where the original string starts
-                start_pos = decrypted.find(original)
-                if start_pos >= 0:
-                    return True, decrypted
-                else:
-                    return False, decrypted
-            else:
-                return False, decrypted
-        except Exception as e:
-            return False, f"Verification failed: {e}"
+            return original in decrypted
+        except:
+            return False
     
-    def encrypt(self, data: str, algorithm: str = "rotating", evasion_level: str = "medium") -> EncryptionResult:
-        """Main encryption method"""
+    def encrypt(self, data: str, algorithm: str = "rotating", evasion_level: str = "medium", key_length: int = None) -> EncryptionResult:
+        """Main encryption method with configurable key length"""
         
         # Convert string to bytes
         data_bytes = data.encode('utf-8')
@@ -216,9 +197,6 @@ class XorpherEngine:
             "high": 0.6,
             "extreme": 0.8
         }.get(evasion_level, 0.4)
-        
-        # Store positions of real data for verification
-        real_positions = []
         
         # Create final byte array with garbage
         if garbage_ratio > 0:
@@ -243,35 +221,26 @@ class XorpherEngine:
             
             data_bytes = bytes(mixed)
         
-        # Generate key
-        key = self.generate_key(len(data_bytes), algorithm)
+        # Generate key with specified length
+        key = self.generate_key(len(data_bytes), algorithm, key_length)
         
-        # Encrypt based on algorithm
-        if algorithm == "simple":
-            # Simple XOR with single key
-            key_byte = key[0]
-            encrypted = bytes([b ^ key_byte for b in data_bytes])
-        else:
-            # Rotating XOR (also used for poly)
-            encrypted = bytearray()
-            key_len = len(key)
-            for i, b in enumerate(data_bytes):
-                encrypted.append(b ^ key[i % key_len])
-            encrypted = bytes(encrypted)
+        # Encrypt
+        encrypted = bytearray()
+        key_len = len(key)
+        for i, b in enumerate(data_bytes):
+            encrypted.append(b ^ key[i % key_len])
+        encrypted = bytes(encrypted)
         
         # Verify encryption
-        verification_passed, decrypted_data = self.verify_encryption(data, encrypted, key)
-        
-        if not verification_passed:
-            print(f"{Fore.YELLOW}[!] Warning: Encryption verification initially failed, retrying...{Style.RESET_ALL}")
-            # Recursively try again if verification fails
-            return self.encrypt(data, algorithm, evasion_level)
+        if not self.verify_encryption(data, encrypted, key):
+            print(f"{Fore.YELLOW}[!] Warning: Encryption verification failed, retrying...{Style.RESET_ALL}")
+            return self.encrypt(data, algorithm, evasion_level, key_length)
         
         # Generate C array
-        c_array = self.generate_c_array(encrypted, key, algorithm, evasion_level, original_length, real_positions)
+        c_array = self.generate_c_array(encrypted, key, algorithm, evasion_level, original_length, key_length)
         
         # Generate Python array
-        python_array = self.generate_python_array(encrypted, key, original_length, real_positions)
+        python_array = self.generate_python_array(encrypted, key, original_length)
         
         # Encode to base64
         b64 = base64.b64encode(encrypted).decode('utf-8')
@@ -282,133 +251,89 @@ class XorpherEngine:
             key=key,
             algorithm=algorithm,
             evasion_level=evasion_level,
+            key_length=key_length,
             c_array=c_array,
             python_array=python_array,
             base64_str=b64
         )
     
-    def generate_c_array(self, encrypted: bytes, key: List[int], algorithm: str, evasion: str, original_len: int, real_positions: List[int]) -> str:
-        """Generate C array code for the encrypted data"""
-        # Format encrypted bytes
-        hex_lines = []
-        line = []
-        for i, b in enumerate(encrypted):
-            line.append(f"0x{b:02x}")
-            if len(line) == 12 or i == len(encrypted) - 1:
-                hex_lines.append("    " + ", ".join(line))
-                line = []
+    def generate_c_array(self, encrypted: bytes, key: List[int], algorithm: str, evasion: str, original_len: int, key_length: int) -> str:
+        """Generate C array code"""
         
-        encrypted_hex = ",\n".join(hex_lines)
+        # Format encrypted bytes as string literal
+        encrypted_str = ''.join(f'\\x{b:02x}' for b in encrypted)
         
-        # Format key
-        key_hex = ", ".join([f"0x{k:02x}" for k in key])
+        # Format key array
+        key_str = ', '.join([f'0x{k:02x}' for k in key])
         
-        # Create position array if we have positions
-        positions_str = ""
-        if real_positions:
-            pos_lines = []
-            line = []
-            for i, pos in enumerate(real_positions):
-                line.append(str(pos))
-                if len(line) == 20 or i == len(real_positions) - 1:
-                    pos_lines.append("    " + ", ".join(line))
-                    line = []
-            positions_str = f"""
+        # Create multiple format options
+        formats = []
+        
+        # Format 1: String literal with key array
+        formats.append(f"""// Option 1: String literal format
+unsigned char encrypted[] = "{encrypted_str}";
+unsigned char key[] = {{{key_str}}};
+unsigned int key_len = {len(key)};""")
+        
+        # Format 2: Byte array format
+        hex_bytes = ', '.join([f'0x{b:02x}' for b in encrypted])
+        formats.append(f"""// Option 2: Byte array format
+unsigned char encrypted[] = {{{hex_bytes}}};
+unsigned char key[] = {{{key_str}}};
+unsigned int key_len = {len(key)};""")
+        
+        # Format 3: Struct format (if your code uses custom structs)
+        formats.append(f"""// Option 3: Struct format (customize as needed)
+typedef struct {{
+    unsigned char* data;
+    unsigned int size;
+    unsigned char key[{len(key)}];
+}} encrypted_string_t;
 
-// Positions of real data (for extracting original string)
-int real_positions[{len(real_positions)}] = {{
-{",\n".join(pos_lines)}
-}};
-"""
+encrypted_string_t encrypted = {{(unsigned char*)"{encrypted_str}", {len(encrypted)}, {{{key_str}}}}};""")
         
         return f"""/*
- * XORPHER v2.0 - Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+ * XORPHER v2.1 - Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
  * Author: Excalibra (https://github.com/Excalibra)
  * 
- * Original string: "{self.truncate_string(original_len, 50)}"
- * Original length: {original_len} bytes
+ * Original string: "{original_len} bytes"
  * Algorithm: {algorithm}
  * Evasion level: {evasion}
+ * Key length: {key_length if key_length else 'Auto'} bytes
  * Total encrypted size: {len(encrypted)} bytes
- * Garbage bytes: {len(encrypted) - original_len} ({evasion} level)
  */
 
-// Encrypted data (includes garbage bytes for evasion)
-unsigned char encrypted_data[] = {{
-{encrypted_hex}
-}};
+{"=" * 60}
+// Choose the format that matches your code:
+{"=" * 60}
 
-// Encryption key
-unsigned char xor_key[] = {{ {key_hex} }};
-unsigned int key_length = {len(key)};
-{positions_str}
-// Decryption function
-void decrypt_data(unsigned char *data, int data_len, unsigned char *key, int key_len) {{
+{chr(10).join(formats)}
+
+{"=" * 60}
+// Decryption function example:
+{"=" * 60}
+void decrypt(unsigned char *data, int data_len, unsigned char *key, int key_len) {{
     for(int i = 0; i < data_len; i++) {{
         data[i] ^= key[i % key_len];
     }}
 }}
 
-// Extract original string (removes garbage bytes)
-void extract_original(unsigned char *data, int data_len, unsigned char *output) {{
-    int out_idx = 0;
-    for(int i = 0; i < data_len; i++) {{
-        // Check if this position contains real data
-        // You need to implement your own logic or store positions
-        // For simplicity, we'll just decrypt all and use the string
-        output[out_idx++] = data[i];
-    }}
-    output[out_idx] = '\\0';
-}}
-
-// Usage example:
-// decrypt_data(encrypted_data, sizeof(encrypted_data), xor_key, key_length);
-// printf("Decrypted (with garbage): %s\\n", encrypted_data);
-// // Original string is contained within the decrypted data
+// Usage:
+// decrypt(encrypted, sizeof(encrypted), key, key_len);
+// printf("%s\\n", encrypted);  // Prints original string
 """
     
-    def truncate_string(self, original_len, max_len):
-        """Truncate string for display"""
-        return "..."  # Just return placeholder since we don't have the actual string here
-    
-    def generate_python_array(self, encrypted: bytes, key: List[int], original_len: int, real_positions: List[int]) -> str:
+    def generate_python_array(self, encrypted: bytes, key: List[int], original_len: int) -> str:
         """Generate Python array code"""
-        return f"""# XORPHER v2.0 - Python Decryption Example
-# Author: Excalibra (https://github.com/Excalibra)
-# Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        return f"""# XORPHER v2.1 - Python Decryption
+encrypted = {list(encrypted)}
+key = {key}
 
-encrypted = {list(encrypted)}  # Encrypted data with garbage bytes
-key = {key}  # Encryption key
-original_length = {original_len}  # Original string length
+def decrypt(data, key):
+    return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
 
-def decrypt(encrypted_data, xor_key):
-    '''Decrypt XORPHER encrypted data'''
-    decrypted = bytearray()
-    key_len = len(xor_key)
-    
-    for i, byte in enumerate(encrypted_data):
-        decrypted.append(byte ^ xor_key[i % key_len])
-    
-    return bytes(decrypted)
-
-def extract_original(decrypted_data, original_len):
-    '''Extract original string (first original_len bytes that are valid)'''
-    # In a real scenario, you'd need to know which bytes are real
-    # For simplicity, we'll just take the first original_len bytes
-    return decrypted_data[:original_len]
-
-# Decrypt and verify
-decrypted_bytes = decrypt(encrypted, key)
-print(f"Full decrypted (with garbage): {{decrypted_bytes}}")
-
-# Extract original (simplified - real implementation would need position tracking)
-original_bytes = decrypted_bytes[:original_length]
-try:
-    original_string = original_bytes.decode('utf-8', errors='ignore')
-    print(f"Extracted original: {{original_string}}")
-    print(f"Original length: {{original_length}} bytes")
-except:
-    print("Could not decode original string")
+decrypted = decrypt(encrypted, key)
+print(f"Decrypted: {{decrypted.decode('utf-8', errors='ignore')}}")
 """
 
 class XorpherGenerator:
@@ -420,20 +345,19 @@ class XorpherGenerator:
         self.results_history = []
         self.output_dir = "xorpher_output"
         
-        # Create output directory if it doesn't exist
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
     
-    def encrypt_domain(self):
-        """Encrypt a domain or string entered by user"""
+    def encrypt_string(self):
+        """Encrypt a string entered by user"""
         self.ui.clear_screen()
         self.ui.print_banner()
         
-        self.ui.print_header("DOMAIN / STRING ENCRYPTION")
+        self.ui.print_header("STRING ENCRYPTION")
         
         # Get input from user
-        print(f"\n{Fore.CYAN}Enter the domain or string to encrypt:{Style.RESET_ALL}")
-        print(f"{Fore.WHITE}(e.g., www.example.com, 192.168.1.1, etc.){Style.RESET_ALL}")
+        print(f"\n{Fore.CYAN}Enter the string to encrypt:{Style.RESET_ALL}")
+        print(f"{Fore.WHITE}(e.g., api.example.com, 192.168.1.1, payload, etc.){Style.RESET_ALL}")
         text = input(f"\n{Fore.GREEN}>>>{Style.RESET_ALL} ").strip()
         
         if not text:
@@ -443,9 +367,9 @@ class XorpherGenerator:
         
         # Select algorithm
         self.ui.print_header("SELECT ALGORITHM")
-        print(f"{Fore.CYAN}1. Simple XOR{Style.RESET_ALL}     - Single key (basic)")
-        print(f"{Fore.CYAN}2. Rotating XOR{Style.RESET_ALL}   - Key changes per byte (recommended)")
-        print(f"{Fore.CYAN}3. Polymorphic{Style.RESET_ALL}    - Hash-based key (maximum stealth)")
+        print(f"{Fore.CYAN}1. Simple XOR{Style.RESET_ALL}     - Single key")
+        print(f"{Fore.CYAN}2. Rotating XOR{Style.RESET_ALL}   - Key repeats every N bytes")
+        print(f"{Fore.CYAN}3. Polymorphic{Style.RESET_ALL}    - Hash-based dynamic keys")
         
         algo_choice = input(f"\n{Fore.GREEN}Choice (1-3) [default: 2]:{Style.RESET_ALL} ").strip() or "2"
         
@@ -456,15 +380,55 @@ class XorpherGenerator:
         }
         algorithm = algorithms.get(algo_choice, 'rotating')
         
+        # Select key length
+        self.ui.print_header("KEY LENGTH CONFIGURATION")
+        print(f"{Fore.CYAN}Choose key length (affects security & compatibility):{Style.RESET_ALL}")
+        print(f"\n{Fore.YELLOW}1. Auto{Style.RESET_ALL}         - Key length = data length (maximum entropy)")
+        print(f"{Fore.YELLOW}2. 1 byte{Style.RESET_ALL}        - Single key (simple XOR)")
+        print(f"{Fore.YELLOW}3. 3 bytes{Style.RESET_ALL}       - Common for legacy code")
+        print(f"{Fore.YELLOW}4. 4 bytes{Style.RESET_ALL}       - Good balance")
+        print(f"{Fore.YELLOW}5. 8 bytes{Style.RESET_ALL}       - Stronger")
+        print(f"{Fore.YELLOW}6. 16 bytes{Style.RESET_ALL}      - Very strong")
+        print(f"{Fore.YELLOW}7. 32 bytes{Style.RESET_ALL}      - Maximum strength")
+        print(f"{Fore.YELLOW}8. Custom{Style.RESET_ALL}        - Specify your own length")
+        
+        key_choice = input(f"\n{Fore.GREEN}Choice (1-8) [default: 3]:{Style.RESET_ALL} ").strip() or "3"
+        
+        key_length = None
+        if key_choice == '1':
+            key_length = None  # Auto
+            self.ui.print_info("Using auto key length (equals data length)")
+        elif key_choice == '2':
+            key_length = 1
+        elif key_choice == '3':
+            key_length = 3
+        elif key_choice == '4':
+            key_length = 4
+        elif key_choice == '5':
+            key_length = 8
+        elif key_choice == '6':
+            key_length = 16
+        elif key_choice == '7':
+            key_length = 32
+        elif key_choice == '8':
+            try:
+                key_length = int(input(f"{Fore.CYAN}Enter key length (1-64):{Style.RESET_ALL} ").strip())
+                if key_length < 1 or key_length > 64:
+                    key_length = 3
+                    self.ui.print_warning("Invalid length, using 3 bytes")
+            except:
+                key_length = 3
+                self.ui.print_warning("Using 3 bytes")
+        
         # Select evasion level
         self.ui.print_header("SELECT EVASION LEVEL")
         print(f"{Fore.CYAN}1. None{Style.RESET_ALL}      - No garbage bytes")
         print(f"{Fore.CYAN}2. Low{Style.RESET_ALL}       - 20% garbage bytes")
-        print(f"{Fore.CYAN}3. Medium{Style.RESET_ALL}    - 40% garbage bytes (recommended)")
+        print(f"{Fore.CYAN}3. Medium{Style.RESET_ALL}    - 40% garbage bytes")
         print(f"{Fore.CYAN}4. High{Style.RESET_ALL}      - 60% garbage bytes")
         print(f"{Fore.CYAN}5. Extreme{Style.RESET_ALL}   - 80% garbage bytes")
         
-        eva_choice = input(f"\n{Fore.GREEN}Choice (1-5) [default: 3]:{Style.RESET_ALL} ").strip() or "3"
+        eva_choice = input(f"\n{Fore.GREEN}Choice (1-5) [default: 1]:{Style.RESET_ALL} ").strip() or "1"
         
         evasion_levels = {
             '1': 'none',
@@ -473,12 +437,17 @@ class XorpherGenerator:
             '4': 'high',
             '5': 'extreme'
         }
-        evasion = evasion_levels.get(eva_choice, 'medium')
+        evasion = evasion_levels.get(eva_choice, 'none')
         
-        # Confirm
-        print(f"\n{Fore.YELLOW}Encrypting: '{text}'")
-        print(f"Algorithm: {algorithm}")
-        print(f"Evasion: {evasion}{Style.RESET_ALL}")
+        # Show summary
+        print(f"\n{Fore.YELLOW}{'='*50}")
+        print(f"Encryption Summary:")
+        print(f"{'='*50}")
+        print(f"String:     {text}")
+        print(f"Algorithm:  {algorithm}")
+        print(f"Key Length: {key_length if key_length else 'Auto'} bytes")
+        print(f"Evasion:    {evasion}")
+        print(f"{'='*50}{Style.RESET_ALL}")
         
         confirm = input(f"\n{Fore.CYAN}Proceed? (y/n) [default: y]:{Style.RESET_ALL} ").strip().lower()
         if confirm == 'n':
@@ -488,14 +457,11 @@ class XorpherGenerator:
         
         # Perform encryption
         self.ui.print_info("Encrypting...")
-        result = self.engine.encrypt(text, algorithm, evasion)
+        result = self.engine.encrypt(text, algorithm, evasion, key_length)
         self.results_history.append(result)
         
         # Display result
         self.display_result(result)
-        
-        # Verify encryption by decrypting
-        self.verify_encryption(result)
         
         # Save to file
         self.save_result(result)
@@ -510,83 +476,6 @@ class XorpherGenerator:
         
         input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
     
-    def verify_encryption(self, result: EncryptionResult):
-        """Verify encryption by decrypting and showing the result"""
-        self.ui.print_header("ENCRYPTION VERIFICATION")
-        
-        print(f"\n{Fore.CYAN}Decrypting to verify...{Style.RESET_ALL}")
-        
-        # Decrypt the data
-        decrypted = self.engine.decrypt(result.encrypted, result.key)
-        
-        # Check if original is in decrypted
-        if result.original in decrypted:
-            self.ui.print_verification_success()
-            print(f"\n{Fore.GREEN}Original string: {Style.RESET_ALL}{result.original}")
-            print(f"{Fore.GREEN}Decrypted string: {Style.RESET_ALL}{decrypted}")
-            print(f"{Fore.GREEN}Status: {Style.RESET_ALL}✅ Original found in decrypted data")
-            
-            # Show where the original appears
-            start_pos = decrypted.find(result.original)
-            if start_pos >= 0:
-                print(f"{Fore.GREEN}Position: {Style.RESET_ALL}Bytes {start_pos}-{start_pos + len(result.original) - 1}")
-                
-                # Show visual representation
-                print(f"\n{Fore.CYAN}Decrypted data visualization:{Style.RESET_ALL}")
-                prefix = decrypted[:start_pos]
-                match = result.original
-                suffix = decrypted[start_pos + len(match):]
-                
-                # Truncate if too long
-                if len(prefix) > 20:
-                    prefix = "..." + prefix[-20:]
-                if len(suffix) > 20:
-                    suffix = suffix[:20] + "..."
-                
-                print(f"{Fore.WHITE}{prefix}{Fore.GREEN}{match}{Fore.WHITE}{suffix}{Style.RESET_ALL}")
-                print(f"{Fore.WHITE}{' ' * len(prefix)}{'^' * len(match)}{Style.RESET_ALL}")
-        else:
-            self.ui.print_error("Verification FAILED! Original string not found in decrypted data.")
-            print(f"\n{Fore.RED}Original: {result.original}")
-            print(f"Decrypted: {decrypted}{Style.RESET_ALL}")
-    
-    def encrypt_file(self):
-        """Encrypt contents of a file"""
-        self.ui.clear_screen()
-        self.ui.print_banner()
-        
-        self.ui.print_header("FILE ENCRYPTION")
-        
-        filename = input(f"\n{Fore.CYAN}Enter filename to encrypt:{Style.RESET_ALL} ").strip()
-        
-        try:
-            with open(filename, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            self.ui.print_success(f"Loaded {len(content)} characters from {filename}")
-            
-            # Use medium evasion by default for files
-            result = self.engine.encrypt(content, "rotating", "high")
-            self.results_history.append(result)
-            
-            self.display_result(result)
-            self.verify_encryption(result)
-            self.save_result(result)
-            
-            if CLIPBOARD_AVAILABLE:
-                try:
-                    pyperclip.copy(result.c_array)
-                    self.ui.print_success("C array copied to clipboard!")
-                except:
-                    pass
-            
-        except FileNotFoundError:
-            self.ui.print_error(f"File not found: {filename}")
-        except Exception as e:
-            self.ui.print_error(f"Error reading file: {e}")
-        
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
-    
     def display_result(self, result: EncryptionResult):
         """Display encryption result"""
         self.ui.clear_screen()
@@ -594,53 +483,23 @@ class XorpherGenerator:
         
         print(f"\n{Fore.GREEN}Original:{Style.RESET_ALL} {result.original}")
         print(f"{Fore.GREEN}Algorithm:{Style.RESET_ALL} {result.algorithm}")
+        print(f"{Fore.GREEN}Key Length:{Style.RESET_ALL} {result.key_length if result.key_length else 'Auto'} bytes")
         print(f"{Fore.GREEN}Evasion Level:{Style.RESET_ALL} {result.evasion_level}")
-        print(f"{Fore.GREEN}Key length:{Style.RESET_ALL} {len(result.key)} bytes")
         print(f"{Fore.GREEN}Encrypted size:{Style.RESET_ALL} {len(result.encrypted)} bytes")
-        print(f"{Fore.GREEN}Garbage bytes:{Style.RESET_ALL} {len(result.encrypted) - len(result.original.encode('utf-8'))}")
         
         # Show key preview
-        key_preview = result.key[:10]
+        key_preview = result.key[:min(10, len(result.key))]
+        preview_str = ' '.join([f'0x{b:02x}' for b in key_preview])
         if len(result.key) > 10:
-            key_display = str(key_preview)[:-1] + ", ...]"
-        else:
-            key_display = str(key_preview)
-        print(f"{Fore.GREEN}Key (first 10):{Style.RESET_ALL} {key_display}")
+            preview_str += ' ...'
+        print(f"{Fore.GREEN}Key:{Style.RESET_ALL} {preview_str}")
         
-        # Show Base64 preview
-        print(f"{Fore.GREEN}Base64 (first 50):{Style.RESET_ALL} {result.base64[:50]}...")
-        
-        # Show C array preview
-        print(f"\n{Fore.YELLOW}C Array (preview):{Style.RESET_ALL}")
-        c_lines = result.c_array.strip().split('\n')
-        # Show first 5 and last 5 lines of the array data
-        array_start = 0
-        array_end = 0
-        for i, line in enumerate(c_lines):
-            if 'unsigned char encrypted_data' in line:
-                array_start = i + 2  # Skip the opening line
-            if '};' in line and i > array_start:
-                array_end = i
-                break
-        
-        if array_end > array_start:
-            # Show first 3 lines of array
-            for line in c_lines[array_start:min(array_start+3, array_end)]:
-                print(f"  {line}")
-            if array_end - array_start > 6:
-                print(f"  {Fore.CYAN}  ... ({array_end - array_start - 6} more lines){Style.RESET_ALL}")
-            # Show last 3 lines of array
-            for line in c_lines[max(array_end-3, array_start+3):array_end]:
-                print(f"  {line}")
-        else:
-            for line in c_lines[:10]:
-                print(f"  {line}")
+        print(f"\n{Fore.YELLOW}Multiple output formats available in the full output.{Style.RESET_ALL}")
+        print(f"\n{Fore.CYAN}Full details saved to: {self.output_dir}/{Style.RESET_ALL}")
     
     def save_result(self, result: EncryptionResult):
         """Save result to file"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
-        # Create a safe filename from the original string
         safe_name = "".join(c for c in result.original[:20] if c.isalnum() or c in '._- ')
         safe_name = safe_name.replace(' ', '_')
         if not safe_name:
@@ -650,23 +509,22 @@ class XorpherGenerator:
         
         with open(filename, 'w', encoding='utf-8') as f:
             f.write("="*70 + "\n")
-            f.write("XORPHER v2.0 - ENCRYPTION RESULT\n")
+            f.write("XORPHER v2.1 - ENCRYPTION RESULT\n")
             f.write(f"Author: Excalibra | GitHub: https://github.com/Excalibra\n")
             f.write(f"Generated: {result.timestamp}\n")
             f.write("="*70 + "\n\n")
             
             f.write(f"ORIGINAL STRING:\n{result.original}\n\n")
             f.write(f"ALGORITHM: {result.algorithm}\n")
+            f.write(f"KEY LENGTH: {result.key_length if result.key_length else 'Auto'} bytes\n")
             f.write(f"EVASION LEVEL: {result.evasion_level}\n")
             f.write(f"KEY: {result.key}\n")
-            f.write(f"KEY LENGTH: {len(result.key)} bytes\n")
-            f.write(f"ENCRYPTED SIZE: {len(result.encrypted)} bytes\n")
-            f.write(f"GARBAGE BYTES: {len(result.encrypted) - len(result.original.encode('utf-8'))}\n\n")
+            f.write(f"ENCRYPTED SIZE: {len(result.encrypted)} bytes\n\n")
             
             f.write("BASE64 ENCODED:\n")
             f.write(f"{result.base64}\n\n")
             
-            f.write("C ARRAY:\n")
+            f.write("C ARRAY (Multiple Formats):\n")
             f.write(result.c_array)
             f.write("\n\n")
             
@@ -676,72 +534,41 @@ class XorpherGenerator:
         
         self.ui.print_success(f"Result saved to: {filename}")
     
-    def show_evasion_guide(self):
-        """Show evasion techniques guide"""
+    def show_guide(self):
+        """Show encryption guide"""
         self.ui.clear_screen()
         self.ui.print_banner()
         
-        self.ui.print_header("XORPHER EVASION TECHNIQUES GUIDE")
+        self.ui.print_header("XORPHER ENCRYPTION GUIDE")
         
         guide = f"""
-{Fore.CYAN}1. GARBAGE BYTE INSERTION{Style.RESET_ALL}
-   • Random bytes are inserted between real data
-   • Breaks signature-based detection patterns
-   • Ratio increases with evasion level:
-     - Low: 20% garbage
-     - Medium: 40% garbage (recommended)
-     - High: 60% garbage
-     - Extreme: 80% garbage
+{Fore.CYAN}KEY LENGTH SELECTION:{Style.RESET_ALL}
+• 1 byte   - Simple XOR, least secure
+• 3 bytes  - Common in legacy code
+• 4-8 bytes - Good balance of security & size
+• 16+ bytes - Maximum security
 
-{Fore.CYAN}2. ROTATING XOR KEYS{Style.RESET_ALL}
-   • Key changes with each byte position
-   • Avoids static XOR pattern detection
-   • Makes frequency analysis difficult
+{Fore.CYAN}EVASION LEVELS:{Style.RESET_ALL}
+• None    - No garbage, smallest output
+• Low     - 20% garbage
+• Medium  - 40% garbage
+• High    - 60% garbage
+• Extreme - 80% garbage, hardest to detect
 
-{Fore.CYAN}3. POLYMORPHIC ENCRYPTION{Style.RESET_ALL}
-   • Different encryption each run
-   • Based on MD5 hash + random seed
-   • Maximum stealth for sensitive payloads
+{Fore.CYAN}ALGORITHMS:{Style.RESET_ALL}
+• Simple    - Single key for all bytes
+• Rotating  - Key repeats every N bytes
+• Polymorphic - Hash-based keys
 
-{Fore.CYAN}4. SUSPICIOUS KEY AVOIDANCE{Style.RESET_ALL}
-   • Automatically avoids common malware keys
-   • Skips: 0x00, 0x55, 0xAA, 0xFF, 0x33, 0x66
-   • Reduces chance of signature detection
+{Fore.CYAN}OUTPUT FORMATS:{Style.RESET_ALL}
+The tool generates multiple C formats:
+1. String literal with key array
+2. Byte array format
+3. Struct format (customizable)
 
-{Fore.CYAN}5. VERIFICATION SYSTEM{Style.RESET_ALL}
-   • Automatically decrypts after encryption
-   • Confirms the original string is recoverable
-   • Shows exactly where it appears in decrypted data
-   • Guarantees your payload will work
-
-{Fore.YELLOW}RECOMMENDED FOR DOMAINS/IPs:{Style.RESET_ALL}
-   • Use Rotating algorithm with High evasion
-   • This makes static analysis very difficult
-   • Decrypt just before making connection
-   • Always verify the decryption works!
-
-{Fore.YELLOW}TIP:{Style.RESET_ALL} The C array can be directly pasted into your 
-      C/C++ dropper or malware source code.
+{Fore.YELLOW}TIP: Choose key length based on your decryption code!{Style.RESET_ALL}
 """
         print(guide)
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
-    
-    def show_history(self):
-        """Show encryption history"""
-        self.ui.clear_screen()
-        self.ui.print_banner()
-        
-        self.ui.print_header("ENCRYPTION HISTORY")
-        
-        if not self.results_history:
-            print(f"\n{Fore.YELLOW}No encryption history yet.{Style.RESET_ALL}")
-        else:
-            for i, result in enumerate(self.results_history[-10:], 1):  # Show last 10
-                print(f"\n{Fore.CYAN}{i}. {result.timestamp}{Style.RESET_ALL}")
-                print(f"   Original: {result.original[:50]}{'...' if len(result.original) > 50 else ''}")
-                print(f"   Algorithm: {result.algorithm} | Evasion: {result.evasion_level}")
-                print(f"   Size: {len(result.encrypted)} bytes | Garbage: {len(result.encrypted) - len(result.original.encode('utf-8'))} bytes")
-        
         input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
     
     def show_about(self):
@@ -751,7 +578,7 @@ class XorpherGenerator:
         
         about = f"""
 {Fore.CYAN}╔══════════════════════════════════════════════════════════╗
-║                    ABOUT XORPHER v2.0                      ║
+║                    ABOUT XORPHER v2.1                      ║
 ╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}
 
 {Fore.YELLOW}Author:{Style.RESET_ALL}  Excalibra
@@ -759,37 +586,24 @@ class XorpherGenerator:
 {Fore.YELLOW}License:{Style.RESET_ALL} MIT
 
 {Fore.CYAN}Description:{Style.RESET_ALL}
-XORPHER is an advanced XOR encryption tool designed specifically
-for penetration testers and security researchers. It implements
-multiple layers of obfuscation to evade antivirus and EDR solutions.
+XORPHER is an advanced XOR encryption tool with configurable
+key lengths and evasion techniques.
 
 {Fore.CYAN}Features:{Style.RESET_ALL}
-• Multiple encryption algorithms (Simple, Rotating, Polymorphic)
-• Adjustable evasion levels with garbage byte insertion
-• Generates ready-to-use C and Python arrays
-• Automatic suspicious key avoidance
-• Clipboard integration for easy copying
-• Saves results to timestamped files
-• ✅ Automatic decryption verification
-
-{Fore.CYAN}Verification System:{Style.RESET_ALL}
-• Every encryption is automatically decrypted and checked
-• Shows the original string within decrypted garbage data
-• Confirms the encryption works before saving
-• Guarantees your payload will decrypt correctly
+• Configurable key lengths (1-64 bytes)
+• Multiple encryption algorithms
+• Garbage byte insertion
+• Multiple output formats
+• Automatic verification
 
 {Fore.CYAN}Use Cases:{Style.RESET_ALL}
-• Obfuscating domain names and IPs in droppers
-• Hiding strings in payloads
-• Evading static string analysis
-• Educational purposes and authorized testing
+• String obfuscation in payloads
+• Evading static analysis
+• Educational purposes
+• Authorized security testing
 
 {Fore.YELLOW}Disclaimer:{Style.RESET_ALL}
-This tool is for educational and authorized security testing only.
-Use only on systems you own or have explicit permission to test.
-The author is not responsible for any misuse.
-
-{Fore.CYAN}════════════════════════════════════════════════════════════{Style.RESET_ALL}
+For educational and authorized testing only.
 """
         print(about)
         input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
@@ -801,28 +615,21 @@ The author is not responsible for any misuse.
             self.ui.print_banner()
             
             print(f"\n{Fore.YELLOW}MAIN MENU:{Style.RESET_ALL}")
-            print(f"{Fore.CYAN}1.{Style.RESET_ALL} 🔐 Encrypt a domain/string")
-            print(f"{Fore.CYAN}2.{Style.RESET_ALL} 📁 Encrypt from file")
-            print(f"{Fore.CYAN}3.{Style.RESET_ALL} 📖 Evasion techniques guide")
-            print(f"{Fore.CYAN}4.{Style.RESET_ALL} 📜 Encryption history")
-            print(f"{Fore.CYAN}5.{Style.RESET_ALL} ℹ️ About")
-            print(f"{Fore.CYAN}6.{Style.RESET_ALL} 🚪 Exit")
+            print(f"{Fore.CYAN}1.{Style.RESET_ALL} 🔐 Encrypt a string")
+            print(f"{Fore.CYAN}2.{Style.RESET_ALL} 📖 Encryption guide")
+            print(f"{Fore.CYAN}3.{Style.RESET_ALL} ℹ️ About")
+            print(f"{Fore.CYAN}4.{Style.RESET_ALL} 🚪 Exit")
             
-            choice = input(f"\n{Fore.GREEN}Select option (1-6):{Style.RESET_ALL} ").strip()
+            choice = input(f"\n{Fore.GREEN}Select option (1-4):{Style.RESET_ALL} ").strip()
             
             if choice == '1':
-                self.encrypt_domain()
+                self.encrypt_string()
             elif choice == '2':
-                self.encrypt_file()
+                self.show_guide()
             elif choice == '3':
-                self.show_evasion_guide()
-            elif choice == '4':
-                self.show_history()
-            elif choice == '5':
                 self.show_about()
-            elif choice == '6':
+            elif choice == '4':
                 self.ui.print_info("Thanks for using XORPHER!")
-                print(f"{Fore.CYAN}GitHub: https://github.com/Excalibra{Style.RESET_ALL}")
                 sys.exit(0)
             else:
                 self.ui.print_error("Invalid option!")
@@ -837,7 +644,6 @@ def main():
     except KeyboardInterrupt:
         print(f"\n\n{Fore.YELLOW}[!] Interrupted by user{Style.RESET_ALL}")
         print(f"{Fore.CYAN}[+] Thanks for using XORPHER!{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}[+] GitHub: https://github.com/Excalibra{Style.RESET_ALL}")
         sys.exit(0)
 
 if __name__ == "__main__":
