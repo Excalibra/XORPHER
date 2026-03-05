@@ -23,7 +23,7 @@
 
 ## 📋 Overview
 <div align="center">
-  <img width="565" height="636" alt="image" src="https://github.com/user-attachments/assets/cf26d3f9-a7c5-46f7-ab1c-7ff1bef0bf3d" />
+  <img width="927" height="557" alt="image" src="https://github.com/user-attachments/assets/ee6c3dd9-9d22-4efd-8c92-4a756a3acbe8" />
 </div>
 <br>
 XORPHER is a cutting-edge XOR encryption tool designed specifically for penetration testers, red teamers, and security researchers. It implements advanced obfuscation techniques to evade Antivirus (AV) and Endpoint Detection & Response (EDR) solutions by making static analysis and signature detection significantly more difficult.
@@ -187,17 +187,13 @@ You'll be greeted with an interactive menu:
     ▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░
 
     
-    KEY LENGTH         |  EVASION LEVEL      |  ALGORITHM
-    ───────────────────┼─────────────────────┼───────────────────
-    ▸ 1-64 bytes       │  ▸ 0% (none)        │  ▸ simple
-    ▸ auto (max entropy│  ▸ 20% (low)        │  ▸ rotating ★
-    ▸ custom           │  ▸ 40% (medium)     │  ▸ polymorphic
-                       │  ▸ 60% (high)       │
-                       │  ▸ 80% (extreme)    │
+    ALGORITHMS: • Simple • Rotating • Polymorphic • Custom • Legacy
+    KEY LENGTHS: • 1-64 bytes • Auto • Custom configurations
 
     
     ⚡ GITHUB: https://github.com/Excalibra
-    ⚡ AUTHOR: Excalibra  |  VERSION: 2.1.0
+    ⚡ AUTHOR: Excalibra  |  VERSION: 2.5.0
+    ⚡ "MULTI-ALGORITHM XOR ENCRYPTION TOOL"
 
     
     01011000 01001111 01010010 01010000 01001000 01000101 01010010
@@ -210,6 +206,7 @@ You'll be greeted with an interactive menu:
     4. 🚪 Exit
 
     ⚡ Select option (1-4): 
+
 
 ```
 
