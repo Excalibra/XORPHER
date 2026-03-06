@@ -1,6 +1,7 @@
 <div align="center">
-  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/83846602/558865565-0d9d126c-9b57-47a1-96e2-fb4ca0306989.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260305%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260305T173913Z&X-Amz-Expires=300&X-Amz-Signature=91ce25bb09a85b6a8606af9f876ba531d62f37eca8117b2fda99548775f11b38&X-Amz-SignedHeaders=host" alt="XORPHER Logo" width="700px">
-  
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/83846602/559098282-4d167401-1503-4f77-a0f2-dc3a53a1570d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260306T041354Z&X-Amz-Expires=300&X-Amz-Signature=4eb6ba863ce8ed1e295b0ad431a29c274b0743c41bd9c42d9bf3a40885c74269&X-Amz-SignedHeaders=host" alt="XORPHER Logo" width="700px">
+
+
   # 🚀 XORPHER v2.5
   ### Advanced XOR Encryption Tool for Evasion
   
@@ -11,12 +12,6 @@
   
   **Stealth Edition - Bypass AV/EDR with 5 Configurable Encryption Algorithms**
   
-  [Features](#features) •
-  [Installation](#installation) •
-  [Usage](#usage) •
-  [Examples](#examples) •
-  [Documentation](#documentation) •
-  [Disclaimer](#disclaimer)
 </div>
 
 ---
