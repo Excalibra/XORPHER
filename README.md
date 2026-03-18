@@ -556,3 +556,8 @@ of this software and associated documentation files...
 8. **Updated roadmap** to mark v2.5 features as completed
 9. **Added custom and legacy to command line arguments**
 10. **Updated all version references** from 2.1 to 2.5
+
+
+## Planned Updates
+
+- Add option to encrypt from a file for shellcodes
